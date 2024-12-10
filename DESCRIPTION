@@ -10,3 +10,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     MASS
+URL: https://github.com/Projeto-CNPq-Clima/STprocpoisson
+BugReports: https://github.com/Projeto-CNPq-Clima/STprocpoisson/issues
