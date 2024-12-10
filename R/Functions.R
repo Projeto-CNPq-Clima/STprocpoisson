@@ -609,7 +609,7 @@ amostrarWgoel=function(W,loca,X,Psi,b,v,nj,N,u1){
 
 }
 ###################################################################3
-amostrarPsiGOEL=function(W,X,Psi,V,M,u1,loca){
+amostrarPsiGOEL=function(W,X,Psi,V,M,u1,loca,b,v){
 
   n=nrow(Psi)
   Psiprop=MASS::mvrnorm(1,Psi,u1*solve(t(X)%*%X))
@@ -636,6 +636,9 @@ amostrarPsiGOEL=function(W,X,Psi,V,M,u1,loca){
     Psiprox=Psi
     rejei=0
   }
+
+
+
 
 
   res=as.matrix(Psiprox)
