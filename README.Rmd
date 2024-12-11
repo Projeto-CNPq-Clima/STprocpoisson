@@ -25,7 +25,11 @@ The goal of STprocpoisson is to ...
 You can install the development version of STprocpoisson like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# Install devtools if not already installed
+install.packages("devtools")
+
+# Install Stdyndef from GitHub
+devtools::install_github("Projeto-CNPq-Clima/STprocpoisson")
 ```
 
 ## Example

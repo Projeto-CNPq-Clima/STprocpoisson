@@ -110,10 +110,10 @@ STModelWeibullMCMC<-function(data,sites,X=cbind(as.matrix(rep(1,ncol(data))),as.
   MbmT=NULL
 
 
-  for(j in 1:iter){
+  for(j in 1:iteration){
 
 
-    if(j<=bar){
+    if(j<=burnin){
       temp=amostrarW(W,M,sites,X,Psi,bw,vw,nj,Tt,SU1)
       W=as.matrix(temp[[1]])
       MWT=c(MWT,temp[[2]])
@@ -153,10 +153,10 @@ STModelWeibullMCMC<-function(data,sites,X=cbind(as.matrix(rep(1,ncol(data))),as.
 
 
       if((j%%50)==0){
-        SU1=sintonizarN(bar,0.15,SU1,MWT,j)
-        SU2=sintonizarN(bar,0.15,SU2,MMT,j)
-        SU3=sintonizar(bar,0.44,SU3,MbwT,j)
-        SU4=sintonizar(bar,0.44,SU4,MbmT,j)
+        SU1=sintonizarN(burnin,0.15,SU1,MWT,j)
+        SU2=sintonizarN(burnin,0.15,SU2,MMT,j)
+        SU3=sintonizar(burnin,0.44,SU3,MbwT,j)
+        SU4=sintonizar(burnin,0.44,SU4,MbmT,j)
 
       }else{
 

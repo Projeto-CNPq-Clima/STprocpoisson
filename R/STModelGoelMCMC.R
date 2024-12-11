@@ -6,8 +6,8 @@
 #' @param Z aaaa
 #' @param M aaaa
 #' @param prior aaaa
-#' @param iter aaaa
-#' @param bar aaaa
+#' @param iteration aaaa
+#' @param burnin aaaa
 #'
 #' @return aaaa
 #' @export
@@ -26,7 +26,7 @@ STModelGoelMCMC<-function(data,sites,X=cbind(as.matrix(rep(1,ncol(data))),as.mat
                               SU3=28.01968,
                               SU5=0.001118574,
                               SU6=0.0553372),
-                   iter=410000,bar=400000){
+                   iteration,burnin){
 
 
   pp=ncol(X)
@@ -66,8 +66,8 @@ STModelGoelMCMC<-function(data,sites,X=cbind(as.matrix(rep(1,ncol(data))),as.mat
 
   Tt=array(NA,dim=c(1,n))
   NN=array(NA,dim=c(1,n))
-  iter=410000
-  bar=400000
+  iteration=410000
+  burnin=400000
   pul=1
   #########################################
   # Parametros computacionais
@@ -95,9 +95,9 @@ STModelGoelMCMC<-function(data,sites,X=cbind(as.matrix(rep(1,ncol(data))),as.mat
   #############################
   ## Programa principal
   ############################3
-  for(j in 1:iter){
+  for(j in 1:iteration){
 
-    if(j<=bar){
+    if(j<=burnin){
 
       theta=exp(W)
       beta=exp(Z%*%lgama)
@@ -138,11 +138,11 @@ STModelGoelMCMC<-function(data,sites,X=cbind(as.matrix(rep(1,ncol(data))),as.mat
       MPsiT=rbind(MPsiT,temp[[2]])
 
       if((j%%50)==0){
-        SU5=sintonizarN(bar,0.30,SU5,MWT,j)
-        SU1=sintonizarN(bar,0.25,SU1,MgamaT,j)
-        SU2=sintonizarN(bar,0.25,SU2,MetaT,j)
-        SU3=sintonizar(bar,0.44,SU3,MbT,j)
-        SU6=sintonizarN(bar,0.25,SU6,MPsiT,j)
+        SU5=sintonizarN(burnin,0.30,SU5,MWT,j)
+        SU1=sintonizarN(burnin,0.25,SU1,MgamaT,j)
+        SU2=sintonizarN(burnin,0.25,SU2,MetaT,j)
+        SU3=sintonizar(burnin,0.44,SU3,MbT,j)
+        SU6=sintonizarN(burnin,0.25,SU6,MPsiT,j)
 
       }else{
 

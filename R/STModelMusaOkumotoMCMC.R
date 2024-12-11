@@ -87,9 +87,9 @@ STModelMusaOkumotoMCMC<-function(data,sites, prior=list(aa1=0.001,bb1=0.001,
   #############################
   ## Programa principal
   ############################3
-  for(j in 1:iter){
+  for(j in 1:iteration){
 
-    if(j<=bar){
+    if(j<=burnin){
 
       SIGMA=gSigma(b,v,sites)
       DELTA=gCorr(b,sites)
@@ -118,9 +118,9 @@ STModelMusaOkumotoMCMC<-function(data,sites, prior=list(aa1=0.001,bb1=0.001,
       Psi=as.matrix(mvrnorm(1,AA,BB))
 
 
-      SU2=sintonizarMUSA(bar,0.30,SU2,MalphaT,j)
-      SU3=sintonizarMUSA(bar,0.44,SU3,MbT,j)
-      SU5=sintonizarNMUSA(bar,0.25,SU5,MWT,j)
+      SU2=sintonizarMUSA(burnin,0.30,SU2,MalphaT,j)
+      SU3=sintonizarMUSA(burnin,0.44,SU3,MbT,j)
+      SU5=sintonizarNMUSA(burnin,0.25,SU5,MWT,j)
       print(j)
 
 
