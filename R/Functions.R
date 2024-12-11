@@ -648,4 +648,168 @@ amostrarPsiGOEL=function(W,X,Psi,V,M,u1,loca,b,v){
 }
 
 
+############################################### MUSA
 
+
+
+
+
+#########################################################################3
+# Comparar valor com elementos de vetor
+localiz=function(vetor,valor){
+
+  vet=as.matrix(vetor)
+  n=nrow(vet)
+
+  for(j in 1:n){
+
+    if(vet[j,1]==valor){
+      return(j)
+    }
+
+  }
+
+
+}
+########################################
+sintonizarMUSA=function(bar,taxa,tau,mat,i){
+
+  mat=as.matrix(mat)
+  temp1=seq(50,bar,50)
+  temp2=temp1-49
+  temp3=ifelse(temp1==i,1,0)
+
+
+  if(sum(temp3)==1){
+
+    indi=localiz(temp1,i)
+    mater=(1/50)*sum(mat[temp2[indi]:temp1[indi],1])
+    if(mater>=taxa){
+      delta=min(0.01,(indi+1)^(-0.5))
+      temp4=log(tau)-delta
+      temp5=exp(temp4)
+      return(temp5)
+    }else{
+      delta=min(0.01,(indi+1)^(-0.5))
+      temp4=log(tau)+delta
+      temp5=exp(temp4)
+      return(temp5)
+    }
+
+  }else{
+
+    return(tau)
+
+  }
+
+
+}
+
+####################################################################################
+sintonizarNMUSA=function(bar,taxa,tau,mat,i){
+
+  mat=as.matrix(mat)
+  temp1=seq(50,bar,50)
+  temp2=temp1-49
+  temp3=ifelse(temp1==i,1,0)
+
+
+  if(sum(temp3)==1){
+
+    indi=localiz(temp1,i)
+    mater=(1/50)*sum(mat[temp2[indi]:temp1[indi],1])
+    if(mater>=taxa){
+      delta=min(0.01,(indi+1)^(-0.5))
+      temp4=log(tau)+delta
+      temp5=exp(temp4)
+      return(temp5)
+    }else{
+      delta=min(0.01,(indi+1)^(-0.5))
+      temp4=log(tau)-delta
+      temp5=exp(temp4)
+      return(temp5)
+    }
+
+  }else{
+
+    return(tau)
+
+  }
+
+
+}
+
+####################################################################################
+##Amostrador de alpha MH
+amostraralphaMUSA<-function(alpha,W,Tt,c1,d1,x,ff)
+  #######################################
+{
+
+  n=ncol(x)
+
+  alphaprop<-rgamma(1,alpha*ff, rate=ff)
+
+
+
+  palpha=(c1-1)*log(alpha)-d1*alpha-sum(exp(W)*log(1+Tt/alpha))-sum(log(x+alpha),na.rm = T)
+
+  palphaprop=(c1-1)*log(alphaprop)-d1*alphaprop-sum(exp(W)*log(1+Tt/alphaprop))-sum(log(x+alphaprop),na.rm = T)
+
+  logprob<-palphaprop+log(dgamma(alpha,alphaprop*ff, rate=ff))-(palpha + log(dgamma(alphaprop,alpha*ff, rate=ff)))
+
+  probac<-min(c(1,exp(logprob)))
+
+  u<-runif(1)
+
+  if(u<probac){
+    res<-alphaprop
+    rejei=1
+
+
+  }
+  else{
+    res<-alpha
+    rejei=0
+  }
+
+  res=list(res,rejei)
+  res
+
+}
+
+#################################################################################################3
+amostrarWMUSA=function(W,loca,X,Psi,b,v,nj,u1,Tt,alpha){
+
+  n=nrow(W)
+  Wprop=mvrnorm(1,W,u1*diag(1,n))
+  SSig=gSigma(b,v,loca)
+
+  postW=sum(as.matrix(nj)*W)-sum( exp(W)*log(1+Tt/alpha) )-0.5*t(W-X%*%Psi)%*%solve(SSig)%*%(W-X%*%Psi)
+  postWprop=sum(as.matrix(nj)*Wprop)-sum( exp(Wprop)*log(1+Tt/alpha) )-0.5*t(Wprop-X%*%Psi)%*%solve(SSig)%*%(Wprop-X%*%Psi)
+  prob=min(exp((postWprop)-(postW)),1)
+
+
+  u=runif(1,0,1)
+
+  if(u<prob){
+
+    Wprox=Wprop
+
+    rejei=1
+
+
+  }else{
+
+    Wprox=W
+    rejei=0
+  }
+
+
+
+
+
+  res=as.matrix(Wprox)
+  res=list(Wprox,rejei)
+  res
+
+}

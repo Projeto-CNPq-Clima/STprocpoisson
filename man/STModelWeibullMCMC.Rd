@@ -23,13 +23,15 @@ STModelWeibullMCMC(
 
 \item{sites}{Malha de pontos}
 
+\item{X}{aaa}
+
+\item{Z}{aaa}
+
 \item{prior}{description}
 
-\item{iter}{número inteiro positivo, interações do algoritmo MCMC}
+\item{iteration}{aaa}
 
-\item{bar}{número inteiro positivo, período de burn-in do algoritmo MCMC}
-
-\item{cov}{description}
+\item{burnin}{aaaa}
 }
 \description{
 Esta é a função para realizar o algoritmo Monte Carlo via Cadeias de Markov para os parâmetros de um processo de Poisson.

@@ -7,10 +7,11 @@
 #'
 #' @param data Matriz de dados simulados de um processo de Poisson
 #' @param sites Malha de pontos
-#' @param iter número inteiro positivo, interações do algoritmo MCMC
-#' @param bar número inteiro positivo, período de burn-in do algoritmo MCMC
-#' @param cov description
 #' @param prior description
+#' @param X aaa
+#' @param Z aaa
+#' @param iteration aaa
+#' @param burnin aaaa
 #'
 #' @export
 

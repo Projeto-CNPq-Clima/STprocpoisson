@@ -1,3 +1,18 @@
+#' Title
+#'
+#' @param data aaaa
+#' @param sites aaaa
+#' @param X aaaa
+#' @param Z aaaa
+#' @param M aaaa
+#' @param prior aaaa
+#' @param iter aaaa
+#' @param bar aaaa
+#'
+#' @return aaaa
+#' @export
+#'
+#'
 STModelGoelMCMC<-function(data,sites,X=cbind(as.matrix(rep(1,ncol(data))),as.matrix(sites)),Z=X,M=Z,
                    prior=list(c3=(-2*log(0.05)/max(dist(sites)))*0.1,
                               d3=0.1,
