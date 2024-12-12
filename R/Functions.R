@@ -92,7 +92,7 @@ amostrarW=function(WW,MM,S,XX,PPs,bb,vv,nn,TT,ff){
 
   SSig=gSigma(bb,vv,S)
 
-  postWW=sum(WW*nn)-sum(exp(WW)*t(TT)^exp(MM))-0.5*t(WW-XX%*%PPs)%*%solve(SSig)%*%(WW-X%*%PPs)
+  postWW=sum(WW*nn)-sum(exp(WW)*t(TT)^exp(MM))-0.5*t(WW-XX%*%PPs)%*%solve(SSig)%*%(WW-XX%*%PPs)
   postWWprop=sum(WWprop*nn)-sum(exp(WWprop)*t(TT)^exp(MM))-0.5*t(WWprop-XX%*%PPs)%*%solve(SSig)%*%(WWprop-XX%*%PPs)
 
   prob=min(exp((postWWprop)-(postWW)),1)

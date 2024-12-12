@@ -14,8 +14,8 @@ STModelGoelMCMC(
     ncol(Z)), AA1 = as.matrix(rep(0, ncol(Z))), aa1 = 2.01, bb1 = 1.005, V = diag(100,
     ncol(X)), MM1 = as.matrix(rep(0, ncol(X))), SU1 = 0.01, SU2 = 0.01, SU3 = 28.01968,
     SU5 = 0.001118574, SU6 = 0.0553372),
-  iter = 410000,
-  bar = 4e+05
+  iteration,
+  burnin
 )
 }
 \arguments{
@@ -31,9 +31,9 @@ STModelGoelMCMC(
 
 \item{prior}{aaaa}
 
-\item{iter}{aaaa}
+\item{iteration}{aaaa}
 
-\item{bar}{aaaa}
+\item{burnin}{aaaa}
 }
 \value{
 aaaa
