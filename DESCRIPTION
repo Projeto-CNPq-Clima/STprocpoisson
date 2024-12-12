@@ -9,6 +9,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
-    MASS
+    MASS,
+    stats,
+    utils
 URL: https://github.com/Projeto-CNPq-Clima/STprocpoisson
 BugReports: https://github.com/Projeto-CNPq-Clima/STprocpoisson/issues
