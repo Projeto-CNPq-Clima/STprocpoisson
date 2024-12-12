@@ -60,9 +60,8 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
                                  d2 = 0.1,
                                  A1 = as.matrix(rep(0, ncol(X))),
                                  B1 = diag(100, ncol(X)),
-                                 Beta = as.matrix(rep(0, ncol(Z))),
-                                 A = as.matrix(rep(0, ncol(Z)))
-                               ), iteration, burnin) {
+                                 A = as.matrix(rep(0, ncol(Z))),
+                                 B = diag(100, ncol(Z))), iteration, burnin) {
   # Valores iniciais
   bw <- 1
   vw <- 1
@@ -94,7 +93,7 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
   SU3 <- 100
   SU4 <- 100
   Psi <- as.matrix(rep(0, ncol(X)))
-  B <- diag(100, ncol(Z))
+  Beta <- as.matrix(rep(0, ncol(Z)))
   n <- ncol(data)
   m <- nrow(data)
   tempdados <- is.na(data)

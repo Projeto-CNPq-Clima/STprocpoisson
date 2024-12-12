@@ -11,8 +11,8 @@ STModelWeibullMCMC(
   Z = X,
   prior = list(aa1 = 0.001, bb1 = 0.001, aa2 = 2.01, bb2 = 1.005, c1 = (-2 *
     log(0.05)/max(dist(sites))) * 0.1, d1 = 0.1, c2 = (-2 * log(0.05)/max(dist(sites))) *
-    0.1, d2 = 0.1, A1 = as.matrix(rep(0, ncol(X))), B1 = diag(100, ncol(X)), Beta =
-    as.matrix(rep(0, ncol(Z))), A = as.matrix(rep(0, ncol(Z)))),
+    0.1, d2 = 0.1, A1 = as.matrix(rep(0, ncol(X))), B1 = diag(100, ncol(X)), A =
+    as.matrix(rep(0, ncol(Z))), B = diag(100, ncol(Z))),
   iteration,
   burnin
 )
