@@ -781,7 +781,7 @@ amostraralphaMUSA<-function(alpha,W,Tt,c1,d1,x,ff)
 amostrarWMUSA=function(W,loca,X,Psi,b,v,nj,u1,Tt,alpha){
 
   n=nrow(W)
-  Wprop=mvrnorm(1,W,u1*diag(1,n))
+  Wprop=MASS::mvrnorm(1,W,u1*diag(1,n))
   SSig=gSigma(b,v,loca)
 
   postW=sum(as.matrix(nj)*W)-sum( exp(W)*log(1+Tt/alpha) )-0.5*t(W-X%*%Psi)%*%solve(SSig)%*%(W-X%*%Psi)

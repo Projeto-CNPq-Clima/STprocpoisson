@@ -115,7 +115,7 @@ STModelMusaOkumotoMCMC<-function(data,sites, prior=list(aa1=0.001,bb1=0.001,
       AA=solve(solve(V)+t(X)%*%solve(SIGMA)%*%X)%*%( solve(V)%*%M+t(X)%*%solve(SIGMA)%*%W)
       BB=solve(solve(V)+t(X)%*%solve(SIGMA)%*%X)
 
-      Psi=as.matrix(mvrnorm(1,AA,BB))
+      Psi=as.matrix(MASS::mvrnorm(1,AA,BB))
 
 
       SU2=sintonizarMUSA(burnin,0.30,SU2,MalphaT,j)
@@ -153,7 +153,7 @@ STModelMusaOkumotoMCMC<-function(data,sites, prior=list(aa1=0.001,bb1=0.001,
       AA=solve(solve(V)+t(X)%*%solve(SIGMA)%*%X)%*%( solve(V)%*%M+t(X)%*%solve(SIGMA)%*%W)
       BB=solve(solve(V)+t(X)%*%solve(SIGMA)%*%X)
 
-      Psi=mvrnorm(1,AA,BB)
+      Psi=MASS::mvrnorm(1,AA,BB)
       MPsi=rbind(MPsi,t(Psi))
 
 
