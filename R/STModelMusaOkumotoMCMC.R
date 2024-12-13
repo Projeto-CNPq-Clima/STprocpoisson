@@ -159,5 +159,6 @@ STModelMusaOkumotoMCMC <- function(data, sites, prior = list(
     }
   }
   resul <- list(SIGMA, DELTA, MW, MWT, Malpha, MalphaT, Mb, MbT, Mv, MPsi)
+  names(resul) <- c("SIGMA", "DELTA", "MW", "MWT", "Malpha", "MalphaT", "Mb", "MbT", "Mv", "MPsi")
   return(resul)
 }
