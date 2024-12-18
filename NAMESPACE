@@ -3,7 +3,7 @@
 export(STModelGoelMCMC)
 export(STModelMusaOkumotoMCMC)
 export(STModelWeibullMCMC)
-export(transforma)
+export(identify_event_times)
 importFrom(stats,dgamma)
 importFrom(stats,dist)
 importFrom(stats,dunif)

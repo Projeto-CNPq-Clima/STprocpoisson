@@ -9,8 +9,6 @@
 #' @param lim aaaa
 #'
 #' @return aaa
-#' @export
-
 transforma <- function(mat, lim) {
   n <- length(mat)
 
