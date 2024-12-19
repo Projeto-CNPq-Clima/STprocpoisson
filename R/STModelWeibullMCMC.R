@@ -226,8 +226,8 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
 
       print(j)
 
-      resul <- list(W, MW, MWT, M, MMj, MMT, Mvw, Mvm, Beta, MbwT, MbmT)
-      names(resul) <- c("W", "MW", "MWT", "M", "MMj", "MMT", "Mvw", "Mvm", "Beta", "MbwT", "MbmT")
+      resul <- list(MMj, MMT, MW,MWT,MPsi,MBeta,Mvw,Mbw,MbwT, Mvm,Mbm, MbmT)
+      names(resul) <- c("MMj", "MMT", "MW","MWT","MPsi","MBeta","Mvw","Mbw","MbwT","Mvm","Mbm","MbmT")
     }
   }
   return(resul)
