@@ -15,7 +15,6 @@
 #'   - `MbwT`: Acceptance indicators for phi_w.
 #'   - `MbmT`: Acceptance indicators for phi_m.
 #'   - `MPsi`: Samples for parameter Psi.
-#' @param data A matrix of occurrence times of the event at monitoring stations.
 #' @param sites A matrix with geographic coordinates of the monitoring stations.
 #' @param X Covariates for the scale parameter of the Weibull intensity.
 #' @param Z Covariates for the shape parameter of the Weibull intensity.
@@ -24,14 +23,14 @@
 #' @param CovZNO Covariates for the shape parameter at the grid points.
 #' @param tau A vector of temporal points for which the mean surface is computed.
 #'
-#' @return A matrix (`Surface`) containing the interpolated mean values at the grid points
+#' @return A list: (`Surface`) containing the interpolated mean values at the grid points
 #' for each temporal point in `tau`. The first column contains the mean values at the initial
 #' time step, and subsequent columns contain the differences between consecutive time steps.
 #'
 #'
 #' @export
 
-compute_mean_surface <- function(results, data, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
+compute_mean_surface <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
   mf <- function(Wl, Ml, tau) {
     res <- exp(Wl) * tau^(exp(Ml))
     res
@@ -118,6 +117,8 @@ compute_mean_surface <- function(results, data, sites, X, Z, DNO, CovXNO, CovZNO
     Surface[, kk] <- minterest
   }
 
-  output <- Surface # list(Surface,MMNO,MWNO)
+  output <- list(Surface,MMNO,MWNO)
+  names(output) <- c("Surface","MMNO","MWNO")
+
   return(output)
 }

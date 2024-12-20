@@ -4,7 +4,7 @@
 \alias{compute_mean_surface}
 \title{Compute Interpolated Mean Surface for Spatiotemporal Model}
 \usage{
-compute_mean_surface(results, data, sites, X, Z, DNO, CovXNO, CovZNO, tau)
+compute_mean_surface(results, sites, X, Z, DNO, CovXNO, CovZNO, tau)
 }
 \arguments{
 \item{results}{A list containing the output from \code{STModelWeibullMCMC}, including:
@@ -21,8 +21,6 @@ compute_mean_surface(results, data, sites, X, Z, DNO, CovXNO, CovZNO, tau)
 \item \code{MPsi}: Samples for parameter Psi.
 }}
 
-\item{data}{A matrix of occurrence times of the event at monitoring stations.}
-
 \item{sites}{A matrix with geographic coordinates of the monitoring stations.}
 
 \item{X}{Covariates for the scale parameter of the Weibull intensity.}
@@ -38,7 +36,7 @@ compute_mean_surface(results, data, sites, X, Z, DNO, CovXNO, CovZNO, tau)
 \item{tau}{A vector of temporal points for which the mean surface is computed.}
 }
 \value{
-A matrix (\code{Surface}) containing the interpolated mean values at the grid points
+A list: (\code{Surface}) containing the interpolated mean values at the grid points
 for each temporal point in \code{tau}. The first column contains the mean values at the initial
 time step, and subsequent columns contain the differences between consecutive time steps.
 }
