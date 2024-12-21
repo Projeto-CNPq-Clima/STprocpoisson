@@ -687,3 +687,30 @@ amostrarWMUSA <- function(W, loca, X, Psi, b, v, nj, u1, Tt, alpha) {
   res <- list(Wprox, rejei)
   res
 }
+
+# Helper function to calculate the observed cumulative mean function
+mtnp <- function(dados) {
+  a <- c(0, dados)
+  m <- length(dados)
+  k <- 1
+  corr <- array(NA, dim = c(m, 2))
+  for (i in 1:m) {
+    corr[i, 1] <- (a[i] + a[i + 1]) / 2
+    tt <- (a[i] + a[i + 1]) / 2
+    rmt <- (1 / k) * (i - 1) + (tt - a[i]) / (k * (a[i + 1] - a[i]))
+    corr[i, 2] <- rmt
+  }
+  corr
+}
+
+MeanFunction <- function(eta, gama, t) {
+  res <- gama * t^eta
+  res
+}
+
+
+
+
+
+
+
