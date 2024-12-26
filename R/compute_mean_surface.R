@@ -26,8 +26,6 @@
 #' @return A list: (`Surface`) containing the interpolated mean values at the grid points
 #' for each temporal point in `tau`. The first column contains the mean values at the initial
 #' time step, and subsequent columns contain the differences between consecutive time steps.
-#'
-#'
 #' @export
 
 compute_mean_surface <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
