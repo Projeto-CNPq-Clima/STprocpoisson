@@ -4,7 +4,15 @@
 #'
 #' @param series A matrix of dimensions Txn, where each column represents the time series of a random variable from a monitoring station.
 #' @param threshold A numeric value representing the user-defined threshold to identify times of interest.
-#' @return A matrix where each column contains the times (indices) at which the values of the respective column in `series` exceeded the threshold. Rows are padded with NA where no event occurred.
+#' @return It returns a matrix where each column corresponds to a location, and each row contains the times of occurrence for that location. The matrix dimensions are m x n, where:
+#' - `m`: Maximum number of occurrences across all locations.
+#' - `n`: Number of locations.
+#'
+#' @examples
+#' library(STprocpoisson)
+#' data(series)
+#' Times<-identify_event_times(series,20)
+#'
 #'
 #' @export
 
@@ -20,6 +28,6 @@ identify_event_times <- function(series, threshold) {
     temp <- as.matrix(transforma(series[, i], limia))
     MATRIZ[1:tamanho[i], i] <- temp
   }
-  data <- MATRIZ
-  return(data)
+  MATRIZ
+  return(MATRIZ)
 }

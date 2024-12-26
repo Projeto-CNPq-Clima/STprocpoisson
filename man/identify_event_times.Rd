@@ -12,8 +12,19 @@ identify_event_times(series, threshold)
 \item{threshold}{A numeric value representing the user-defined threshold to identify times of interest.}
 }
 \value{
-A matrix where each column contains the times (indices) at which the values of the respective column in \code{series} exceeded the threshold. Rows are padded with NA where no event occurred.
+It returns a matrix where each column corresponds to a location, and each row contains the times of occurrence for that location. The matrix dimensions are m x n, where:
+\itemize{
+\item \code{m}: Maximum number of occurrences across all locations.
+\item \code{n}: Number of locations.
+}
 }
 \description{
 This function identifies the times at which the values in each column of a matrix exceed a user-defined threshold.
+}
+\examples{
+library(STprocpoisson)
+data(series)
+Times<-identify_event_times(series,20)
+
+
 }

@@ -18,7 +18,7 @@ STModelWeibullMCMC(
 )
 }
 \arguments{
-\item{data}{A matrix representing the occurrence times of the event of interest at each monitoring station. Each row corresponds
+\item{data}{A matrix representing the occurrence times of the event of interest at each monitoring station. Each column corresponds
 to the occurrence times of a specific station. Dimensions: mxn, where \code{m} is the maximum number of occurrences
 across the stations, and \code{n} is the number of monitoring stations.}
 

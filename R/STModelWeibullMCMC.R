@@ -4,7 +4,7 @@
 #' nonhomogeneous Poisson model with a seasonal component. This model is designed for analyzing extreme rainfall,
 #' as proposed by Fidel Ernesto Castro Morales & Daniele Torres Rodrigues.
 #'
-#' @param data A matrix representing the occurrence times of the event of interest at each monitoring station. Each row corresponds
+#' @param data A matrix representing the occurrence times of the event of interest at each monitoring station. Each column corresponds
 #' to the occurrence times of a specific station. Dimensions: mxn, where `m` is the maximum number of occurrences
 #' across the stations, and `n` is the number of monitoring stations.
 #'
@@ -223,8 +223,6 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
       MbmT <- c(MbmT, temp[[2]])
 
 
-
-      print(j)
 
       resul <- list(MMj, MMT, MW,MWT,MPsi,MBeta,Mvw,Mbw,MbwT, Mvm,Mbm, MbmT)
       names(resul) <- c("MMj", "MMT", "MW","MWT","MPsi","MBeta","Mvw","Mbw","MbwT","Mvm","Mbm","MbmT")
