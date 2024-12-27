@@ -3,6 +3,7 @@
 export(STModelGoelMCMC)
 export(STModelMusaOkumotoMCMC)
 export(STModelWeibullMCMC)
+export(STModelWeibullMCMCSA)
 export(compute_mean_surface)
 export(fit_weibull_model)
 export(identify_event_times)

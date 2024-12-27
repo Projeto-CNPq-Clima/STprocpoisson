@@ -176,7 +176,6 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
 
 
 
-      print(j)
     } else {
       temp <- amostrarW(W, M, sites, X, Psi, bw, vw, nj, Tt, SU1)
       W <- as.matrix(temp[[1]])
