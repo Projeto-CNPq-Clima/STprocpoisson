@@ -1,16 +1,54 @@
-
-#' Title AAAA
-#' AKQJSB
+#' Spatiotemporal Nonhomogeneous Poisson Model with a Weibull Intensity Function and Seasonal Component
 #'
-#' @param Data AAAA
-#' @param sites AAA
-#' @param X AA
-#' @param Z AA
-#' @param prior AAA
-#' @param iteration AAA
-#' @param burnin  AA
+#' Performs a Markov Chain Monte Carlo (MCMC) procedure to estimate the parameters of a spatiotemporal
+#' nonhomogeneous Poisson model with a seasonal component. This model is designed for analyzing extreme rainfall,
+#' as proposed by Fidel Ernesto Castro Morales & Daniele Torres Rodrigues.
 #'
-#' @return AAA
+#' @param Data A matrix representing the occurrence times of the event of interest at each monitoring station. Each column corresponds
+#' to the occurrence times of a specific station. Dimensions: mxn, where `m` is the maximum number of occurrences
+#' across the stations, and `n` is the number of monitoring stations.
+#'
+#' @param sites A matrix with the geographic coordinates of the monitoring stations. Dimensions: nx2.
+#'
+#' @param X A list of covariates for the scale parameter of the Weibull intensity function. Defaults to a matrix combining
+#' a column of ones (intercept) and the coordinates in `sites`.
+#'
+#' @param Z A list of covariates for the shape parameter of the Weibull intensity function. Defaults to the same
+#' covariates as `X`.
+#'
+#' @param prior A list of hyperparameters for the prior distributions of the model parameters:
+#'   \describe{
+#'     \item{sigma^2_w}{Inverse Gamma distribution parameters `aa1` and `bb1`. Default: `aa1=0.001`, `bb1=0.001`.}
+#'     \item{sigma^2_m}{Inverse Gamma distribution parameters `aa2` and `bb2`. Default: `aa2=0.001`, `bb2=0.001`.}
+#'     \item{phi_w}{Gamma distribution parameters `c1` and `d1`. Default: `c1=(-2*log(0.05)/max(dist(sites)))*0.1`, `d1=0.1`.}
+#'     \item{phi_m}{Gamma distribution parameters `c2` and `d2`. Default: `c2=c1`, `d2=d1`.}
+#'     \item{Psi}{Multivariate normal distribution parameters `A1` (mean vector) and `B1` (covariance matrix). Default: `A1=0`, `B1=diag(100, ncol(X))`.}
+#'     \item{Beta}{Multivariate normal distribution parameters `A` (mean vector) and `B` (covariance matrix). Default: `A=0`, `B=diag(100, ncol(Z))`.}
+#'     \item{delta}{arcsine distribution `p(delta)=k(delta(d-delta))^{-1/2}`, `d=100`.}
+#'     \item{f}{arcsine distribution `p(f)=k((f-af)(bf-f))^{-1/2}`, `af=1/(365+10)`, `bf=1/(365-10)`.}
+#'     \item{theta}{arcsine distribution `p(theta)=k((theta)(2pi-theta))^{-1/2}`.}
+#'      }
+#'
+#' @param iteration Number of MCMC iterations.
+#'
+#' @param burnin Number of burn-in iterations to discard before the chains converge.
+#'
+#' @return A list containing:
+#' \describe{
+#'   \item{MMj}{Samples of parameter M obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MMT}{A binary vector indicating whether each proposed value of M was accepted (1) or rejected (0). Used to compute the acceptance rate for M.}
+#'   \item{MW}{Samples of parameter W obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MWT}{A binary vector indicating whether each proposed value of W was accepted (1) or rejected (0). Used to compute the acceptance rate for W.}
+#'   \item{MPsi}{Samples of parameter Psi obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MBeta}{Samples of parameter Beta obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{Mvw}{Samples of parameter sigma^2_w obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{Mbw}{Samples of parameter phi_w obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MbwT}{A binary vector indicating whether each proposed value of phi_w was accepted (1) or rejected (0). Used to compute the acceptance rate for phi_w.}
+#'   \item{Mvm}{Samples of parameter sigma^2_m obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{Mbm}{Samples of parameter phi_m obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MbmT}{A binary vector indicating whether each proposed value of phi_m was accepted (1) or rejected (0). Used to compute the acceptance rate for phi_m.}
+#' }
+#'
 #' @export
 #'
 STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Data))), as.matrix(sites)), Z = X,
@@ -26,7 +64,10 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
                                    A1 = as.matrix(rep(0, ncol(X))),
                                    B1 = diag(100, ncol(X)),
                                    A = as.matrix(rep(0, ncol(Z))),
-                                   B = diag(100, ncol(Z))), iteration, burnin)
+                                   B = diag(100, ncol(Z)),
+                                   d = 100,
+                                   af = 1/(365+10),
+                                   bf = 1/(365-10)), iteration, burnin)
 {
   #Valores iniciais
   bw=1
@@ -52,7 +93,10 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
   B1 <- prior$B1
   A <- prior$A
   B <- prior$B
-
+  # d deve ser real positivo
+  d<-prior$d
+  af <- prior$af
+  bf <- prior$bf
 
   SU1=0.000001
   SU2=0.000001
@@ -60,7 +104,6 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
   SU4=100
 
   Psi=as.matrix(rep(0,ncol(X)))
-
   Beta=as.matrix(rep(0,ncol(Z)))
 
 
@@ -113,7 +156,7 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
       M=as.matrix(temp[[1]])
       MMT=c(MMT,temp[[2]])
 
-      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,100)
+      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,d)
       delta=temp[[1]]
       MdeltaT=c(MdeltaT,temp[[2]])
 
@@ -121,7 +164,7 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
       theta=temp[[1]]
       MthetaT=c(MthetaT,temp[[2]])
 
-      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,1/(365+10),1/(365-10),f)
+      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,af,bf,f)
       f=temp[[1]]
       MfT=c(MfT,temp[[2]])
 
@@ -183,7 +226,7 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
       MMj=rbind(MMj,t(M))
       MMT=c(MMT,temp[[2]])
 
-      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,100)
+      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,d)
       delta=temp[[1]]
       Mdelta=c(Mdelta,delta)
       MdeltaT=c(MdeltaT,temp[[2]])
@@ -193,7 +236,7 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
       Mtheta=c(Mtheta,theta)
       MthetaT=c(MthetaT,temp[[2]])
 
-      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,1/(365+10),1/(365-10),f)
+      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,af,bf,f)
       f=temp[[1]]
       Mf=c(Mf,f)
       MfT=c(MfT,temp[[2]])

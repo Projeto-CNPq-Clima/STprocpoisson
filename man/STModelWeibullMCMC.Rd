@@ -63,6 +63,6 @@ A list containing:
 }
 \description{
 Performs a Markov Chain Monte Carlo (MCMC) procedure to estimate the parameters of a spatiotemporal
-nonhomogeneous Poisson model with a seasonal component. This model is designed for analyzing extreme rainfall,
+nonhomogeneous Poisson model. This model is designed for analyzing extreme rainfall,
 as proposed by Fidel Ernesto Castro Morales & Daniele Torres Rodrigues.
 }

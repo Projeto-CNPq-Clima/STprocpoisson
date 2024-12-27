@@ -1,7 +1,7 @@
 #' Spatiotemporal Nonhomogeneous Poisson Model with Weibull Intensity (MCMC)
 #'
 #' Performs a Markov Chain Monte Carlo (MCMC) procedure to estimate the parameters of a spatiotemporal
-#' nonhomogeneous Poisson model with a seasonal component. This model is designed for analyzing extreme rainfall,
+#' nonhomogeneous Poisson model. This model is designed for analyzing extreme rainfall,
 #' as proposed by Fidel Ernesto Castro Morales & Daniele Torres Rodrigues.
 #'
 #' @param data A matrix representing the occurrence times of the event of interest at each monitoring station. Each column corresponds
