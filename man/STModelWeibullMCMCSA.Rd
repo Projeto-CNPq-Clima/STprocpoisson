@@ -6,9 +6,9 @@
 AKQJSB}
 \usage{
 STModelWeibullMCMCSA(
-  data,
+  datas,
   sites,
-  X = cbind(as.matrix(rep(1, ncol(data))), as.matrix(sites)),
+  X = cbind(as.matrix(rep(1, ncol(datas))), as.matrix(sites)),
   Z = X,
   prior = list(aa1 = 0.001, bb1 = 0.001, aa2 = 2.01, bb2 = 1.005, c1 = (-2 *
     log(0.05)/max(dist(sites))) * 0.1, d1 = 0.1, c2 = (-2 * log(0.05)/max(dist(sites))) *
@@ -19,7 +19,7 @@ STModelWeibullMCMCSA(
 )
 }
 \arguments{
-\item{data}{AAAA}
+\item{datas}{AAAA}
 
 \item{sites}{AAA}
 
