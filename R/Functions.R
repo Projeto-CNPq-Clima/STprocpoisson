@@ -17,17 +17,8 @@ logvero <- function(aalpha, WW, TT, nn, yT) {
   res <- sum(nn) * log(aalpha) + sum(WW * nn) - sum(exp(WW) * TT^(aalpha)) + aalpha * sum(log(yT), na.rm = T)
   res
 }
-######################################################
-logverosa <- function(aalpha, WW, ddelta, ttheta, yT, TT, f) {
-  suma <- 0
-  for (i in 1:ncol(yT)) {
-    res <- sum(log(aalpha * exp(WW[i, ]) * as.matrix(yT[, i])^(aalpha - 1) - ddelta * 2 * pi * f * sin(2 * pi * f * data[, i] + ttheta)), na.rm = T)
-    suma <- suma + res
-  }
 
-  res1 <- suma - sum(exp(WW) * t(TT)^(aalpha) + ddelta * cos(2 * pi * f * t(TT) + ttheta))
-  res1
-}
+
 ######################################################
 sintonizar <- function(bar, taxa, tau, mat, i) {
   mat <- as.matrix(mat)
