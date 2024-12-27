@@ -2,7 +2,7 @@
 #' Title AAAA
 #' AKQJSB
 #'
-#' @param locat AAAA
+#' @param Data AAAA
 #' @param sites AAA
 #' @param X AA
 #' @param Z AA
@@ -13,7 +13,7 @@
 #' @return AAA
 #' @export
 #'
-STModelWeibullMCMCSA <- function(locat, sites, X = cbind(as.matrix(rep(1, ncol(locat))), as.matrix(sites)), Z = X,
+STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Data))), as.matrix(sites)), Z = X,
                                  prior = list(
                                    aa1 = 0.001,
                                    bb1 = 0.001,
@@ -36,8 +36,8 @@ STModelWeibullMCMCSA <- function(locat, sites, X = cbind(as.matrix(rep(1, ncol(l
   theta=pi/2
   delta=0.001
   f=1/365
-  M=as.matrix(rep(log(0.89),ncol(locat)))
-  W=as.matrix(rep(0,ncol(locat)))
+  M=as.matrix(rep(log(0.89),ncol(Data)))
+  W=as.matrix(rep(0,ncol(Data)))
 
   #Hiperparametros
   aa1 <- prior$aa1
@@ -64,14 +64,14 @@ STModelWeibullMCMCSA <- function(locat, sites, X = cbind(as.matrix(rep(1, ncol(l
   Beta=as.matrix(rep(0,ncol(Z)))
 
 
-  n=ncol(locat)
-  m=nrow(locat)
-  tempdados=is.na(locat)
+  n=ncol(Data)
+  m=nrow(Data)
+  tempdados=is.na(Data)
   nj=m-apply(tempdados,2,sum)
 
   Tt=array(NA,dim=c(1,n))
   for(y in 1:n){
-    Tt[1,y]=locat[nj[y],y]
+    Tt[1,y]=Data[nj[y],y]
   }
 
 
@@ -105,23 +105,23 @@ STModelWeibullMCMCSA <- function(locat, sites, X = cbind(as.matrix(rep(1, ncol(l
 
 
     if(j<=burnin){
-      temp=amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,locat,SU1,f)
+      temp=amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,Data,SU1,f)
       W=as.matrix(temp[[1]])
       MWT=c(MWT,temp[[2]])
 
-      temp=amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,locat,SU2,f)
+      temp=amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,Data,SU2,f)
       M=as.matrix(temp[[1]])
       MMT=c(MMT,temp[[2]])
 
-      temp=amostrardelta(theta,delta,W,M,locat,nj,Tt,0.01,f,100)
+      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,100)
       delta=temp[[1]]
       MdeltaT=c(MdeltaT,temp[[2]])
 
-      temp=amostrartheta(theta,delta,W,M,locat,nj,Tt,0.05,f)
+      temp=amostrartheta(theta,delta,W,M,Data,nj,Tt,0.05,f)
       theta=temp[[1]]
       MthetaT=c(MthetaT,temp[[2]])
 
-      temp=amostrarf(theta,delta,W,M,locat,nj,Tt,0.00001/2,1/(365+10),1/(365-10),f)
+      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,1/(365+10),1/(365-10),f)
       f=temp[[1]]
       MfT=c(MfT,temp[[2]])
 
@@ -173,27 +173,27 @@ STModelWeibullMCMCSA <- function(locat, sites, X = cbind(as.matrix(rep(1, ncol(l
 
     }else{
 
-      temp=amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,locat,SU1,f)
+      temp=amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,Data,SU1,f)
       W=as.matrix(temp[[1]])
       MW=rbind(MW,t(W))
       MWT=c(MWT,temp[[2]])
 
-      temp=amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,locat,SU2,f)
+      temp=amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,Data,SU2,f)
       M=as.matrix(temp[[1]])
       MMj=rbind(MMj,t(M))
       MMT=c(MMT,temp[[2]])
 
-      temp=amostrardelta(theta,delta,W,M,locat,nj,Tt,0.01,f,100)
+      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,100)
       delta=temp[[1]]
       Mdelta=c(Mdelta,delta)
       MdeltaT=c(MdeltaT,temp[[2]])
 
-      temp=amostrartheta(theta,delta,W,M,locat,nj,Tt,0.05,f)
+      temp=amostrartheta(theta,delta,W,M,Data,nj,Tt,0.05,f)
       theta=temp[[1]]
       Mtheta=c(Mtheta,theta)
       MthetaT=c(MthetaT,temp[[2]])
 
-      temp=amostrarf(theta,delta,W,M,locat,nj,Tt,0.00001/2,1/(365+10),1/(365-10),f)
+      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,1/(365+10),1/(365-10),f)
       f=temp[[1]]
       Mf=c(Mf,f)
       MfT=c(MfT,temp[[2]])

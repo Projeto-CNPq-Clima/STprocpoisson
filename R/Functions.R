@@ -94,18 +94,18 @@ amostrarW <- function(WW, MM, S, XX, PPs, bb, vv, nn, TT, ff) {
 }
 ######################################################
 # amostrarW(W,M,sites,X,Psi,b,v,nj,Tt,SU2)
-amostrarM <- function(WW, MM, S, ZZ, BBta, bb, vv, data, nn, TT, ff) {
+amostrarM <- function(WW, MM, S, ZZ, BBta, bb, vv, yT, nn, TT, ff) {
   n <- nrow(MM)
   MMprop <- as.matrix(MASS::mvrnorm(1, MM, ff * diag(1, n)))
-  logdata <- log(data)
+  logyT <- log(yT)
   SSig <- gSigma(bb, vv, S)
 
   sum1 <- 0
   sum2 <- 0
 
-  for (j in 1:ncol(data)) {
-    res1 <- sum(exp(MM[j, ]) * logdata[, j], na.rm = T)
-    res2 <- sum(exp(MMprop[j, ]) * logdata[, j], na.rm = T)
+  for (j in 1:ncol(yT)) {
+    res1 <- sum(exp(MM[j, ]) * logyT[, j], na.rm = T)
+    res2 <- sum(exp(MMprop[j, ]) * logyT[, j], na.rm = T)
     sum1 <- sum1 + res1
     sum2 <- sum2 + res2
   }
@@ -135,7 +135,7 @@ amostrarM <- function(WW, MM, S, ZZ, BBta, bb, vv, data, nn, TT, ff) {
   res <- list(MMprox, rejei)
   res
 }
-# amostrarM(W,M,sites,Z,Beta,b,v,data,nj,Tt,SU2)
+# amostrarM(W,M,sites,Z,Beta,b,v,yT,nj,Tt,SU2)
 ######################################################
 amostrarb <- function(W, v, b, loca, ab, bb, X, Psi, u1) {
   bprop <- rgamma(1, shape = b * u1, rate = u1)
@@ -179,7 +179,7 @@ amostrarb <- function(W, v, b, loca, ab, bb, X, Psi, u1) {
 logverosa <- function(MM, WW, ddelta, ttheta, yT, TT, f) {
   suma <- 0
   for (i in 1:ncol(yT)) {
-    res <- sum(log(exp(WW[i, ] + MM[i, ]) * as.matrix(yT[, i])^(exp(MM[i, ]) - 1) - ddelta * 2 * pi * f * sin(2 * pi * f * data[, i] + ttheta)), na.rm = T)
+    res <- sum(log(exp(WW[i, ] + MM[i, ]) * as.matrix(yT[, i])^(exp(MM[i, ]) - 1) - ddelta * 2 * pi * f * sin(2 * pi * f * yT[, i] + ttheta)), na.rm = T)
     suma <- suma + res
   }
 
@@ -230,7 +230,7 @@ amostrarWsa <- function(ddelta, ttheta, WW, MM, loca, XX, PPs, bb, vv, nn, TT, y
   res <- list(Wprox, rejei)
   res
 }
-# amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,data,SU1,f)
+# amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,yT,SU1,f)
 ######################################################
 amostrarMsa <- function(ddelta, ttheta, WW, MM, loca, XX, PPs, bb, vv, nn, TT, yT, ff, f) {
   n <- nrow(MM)
@@ -274,7 +274,7 @@ amostrarMsa <- function(ddelta, ttheta, WW, MM, loca, XX, PPs, bb, vv, nn, TT, y
   res <- list(Mprox, rejei)
   res
 }
-# amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,data,SU2,f)
+# amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,yT,SU2,f)
 amostrardelta <- function(ttheta, ddelta, WW, MM, yT, nn, TT, u1, f, d) {
   deltaprop <- runif(1, max(0, ddelta - u1), min(ddelta + u1, d))
 
@@ -316,7 +316,7 @@ amostrardelta <- function(ttheta, ddelta, WW, MM, yT, nn, TT, u1, f, d) {
   res <- list(bprox, rejei)
   res
 }
-# amostrardelta(theta,delta,W,M,data,nj,Tt,0.01,f,100)
+# amostrardelta(theta,delta,W,M,yT,nj,Tt,0.01,f,100)
 ########################################################################
 amostrartheta <- function(ttheta, ddelta, WW, MM, yT, nn, TT, u1, f) {
   thetaprop <- runif(1, max(0, ttheta - u1), min(ttheta + u1, 2 * pi))
@@ -347,7 +347,7 @@ amostrartheta <- function(ttheta, ddelta, WW, MM, yT, nn, TT, u1, f) {
   res
 }
 
-# amostrartheta(theta,delta,W,M,data,nj,Tt,0.01,f)
+# amostrartheta(theta,delta,W,M,yT,nj,Tt,0.01,f)
 ########################################################################
 amostrarf <- function(ttheta, ddelta, WW, MM, yT, nn, TT, u1, a, b, f) {
   fprop <- runif(1, max(a, f - u1), min(f + u1, b))
@@ -377,8 +377,6 @@ amostrarf <- function(ttheta, ddelta, WW, MM, yT, nn, TT, u1, a, b, f) {
   res <- list(bprox, rejei)
   res
 }
-# amostrarf(theta,delta,W,M,data,nj,Tt,0.001,1/(365+10),1/(365-10),f)
-
 
 ## Amostrador de gamma-beta MH
 amostrargamaGOEL <- function(ggama, eeta, x, ZZ, MM, NNj, Tt, nnj, A, B, ff)
