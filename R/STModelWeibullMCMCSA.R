@@ -288,7 +288,7 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
 
     }
   }
-  RESUL<-list(W,MW,MWT,M,MMj,MMT,Mvw,Mvm,Beta,MbwT,MbmT,Mdelta,MdeltaT,Mtheta,MthetaT,Mf,MfT)
-  names(RESUL)<-c("W","MW","MWT","M","MMj","MMT","Mvw","Mvm","Beta","MbwT","MbmT","Mdelta","MdeltaT","Mtheta","MthetaT","Mf","MfT")
+  RESUL<-list(MMj, MMT, MW,MWT,MPsi,MBeta,Mvw,Mbw,MbwT, Mvm,Mbm, MbmT,Mdelta,MdeltaT,Mtheta,MthetaT,Mf,MfT)
+  names(RESUL)<-c("MMj", "MMT", "MW","MWT","MPsi","MBeta","Mvw","Mbw","MbwT","Mvm","Mbm","MbmT","Mdelta","MdeltaT","Mtheta","MthetaT","Mf","MfT")
   return(RESUL)
 }
