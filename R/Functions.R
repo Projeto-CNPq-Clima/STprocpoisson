@@ -699,7 +699,18 @@ MeanFunction <- function(eta, gama, t) {
 
 
 
+############### compute mean surface
 
+mf <- function(Wl, Ml, tau) {
+res <- exp(Wl) * tau^(exp(Ml))
+res
+}
 
+mfSA<-function(delta,eta,gama,f,ttheta,t){
+
+  res=gama*t^eta+delta*cos(2*pi*f*t+ttheta)
+  res
+
+}
 
 

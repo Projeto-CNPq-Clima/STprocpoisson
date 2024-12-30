@@ -2,9 +2,9 @@
 #'
 #' This function interpolates the mean values on a grid of points (`DNO`) for a spatiotemporal
 #' nonhomogeneous Poisson model with Weibull intensity. The function utilizes the MCMC outputs
-#' from `STModelWeibullMCMC` and applies a Gaussian process-based interpolation.
+#' from `STModelWeibullMCMCSA` and applies a Gaussian process-based interpolation.
 #'
-#' @param results A list containing the output from `STModelWeibullMCMC`, including:
+#' @param resultsSA A list containing the output from `STModelWeibullMCMCSA`, including:
 #'   - `MW`: Samples for parameter W.
 #'   - `MWT`: Acceptance indicators for parameter W.
 #'   - `MMj`: Samples for parameter M.
@@ -17,6 +17,12 @@
 #'   - `Mbm`: Samples for parameter phi_m.
 #'   - `MbmT`: Acceptance indicators for phi_m.
 #'   - `MPsi`: Samples for parameter Psi.
+#'   - `Mdelta` : aaaaa
+#'   - `MdeltaT` : aaaaa
+#'   - `Mtheta` : aaaaa
+#'   - `MthetaT` : aaaaa
+#'   - `Mf` : aaaaa
+#'   - `MfT` : aaaaa
 #' @param sites A matrix with geographic coordinates of the monitoring stations.
 #' @param X Covariates for the scale parameter of the Weibull intensity.
 #' @param Z Covariates for the shape parameter of the Weibull intensity.
@@ -30,7 +36,7 @@
 #' time step, and subsequent columns contain the differences between consecutive time steps.
 #' @export
 
-compute_mean_surface <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
+compute_mean_surfaceSA <- function(resultsSA, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
 
   X<-as.matrix(X)
   Z<-as.matrix(Z)
@@ -42,14 +48,17 @@ compute_mean_surface <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau)
   Xr <- rbind(CovXNO, X)
   Zr <- rbind(CovZNO, Z)
 
-  MW <- results$MW
-  MMj <- results$MMj
-  Mvw <- results$Mvw
-  Mvm <- results$Mvm
-  Mbw <- results$Mbw
-  Mbm <- results$Mbm
-  MBeta <- results$MBeta
-  MPsi <- results$MPsi
+  MW <- resultsSA$MW
+  MMj <- resultsSA$MMj
+  Mvw <- resultsSA$Mvw
+  Mvm <- resultsSA$Mvm
+  Mbw <- resultsSA$Mbw
+  Mbm <- resultsSA$Mbm
+  MBeta <- resultsSA$MBeta
+  MPsi <- resultsSA$MPsi
+  Mdelta<-resultsSA$Mdelta
+  Mtheta<-resultsSA$Mtheta
+  Mf<-resultsSA$Mf
 
   MWNO <- array(NA, dim = c(nrow(MPsi), jj))
   MMNO <- array(NA, dim = c(nrow(MPsi), jj))
@@ -98,7 +107,7 @@ compute_mean_surface <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau)
   Meanmf <- NULL
   for (i in 1:length(tau)) {
     for (h in 1:nrow(MW)) {
-      MfmNO <- rbind(MfmNO, t(as.matrix(mf(MWNO[h, ], MMNO[h, ], tau[i]))))
+      MfmNO <- rbind(MfmNO, t(as.matrix(mfSA(Mdelta[h],exp(MMNO[h,]),exp(MWNO[h,]),Mf[h],Mtheta[h],tau[i]))))
     }
 
     Meanmf <- cbind(Meanmf, as.matrix(apply(MfmNO, 2, mean)))

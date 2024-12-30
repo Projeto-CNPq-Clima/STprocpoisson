@@ -63,6 +63,12 @@ A list containing:
 \item{Mvm}{Samples of parameter sigma^2_m obtained during the MCMC procedure (\code{iteration - burnin}).}
 \item{Mbm}{Samples of parameter phi_m obtained during the MCMC procedure (\code{iteration - burnin}).}
 \item{MbmT}{A binary vector indicating whether each proposed value of phi_m was accepted (1) or rejected (0). Used to compute the acceptance rate for phi_m.}
+\item{Mdelta}{zzzz}
+\item{MdeltaT}{zzzz}
+\item{Mtheta}{zzzz}
+\item{MthetaT}{zzzz}
+\item{Mf}{xxx}
+\item{MfT}{zzzz}
 }
 }
 \description{
