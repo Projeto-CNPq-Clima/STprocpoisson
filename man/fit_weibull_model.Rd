@@ -4,7 +4,7 @@
 \alias{fit_weibull_model}
 \title{Fit and Plot Nonhomogeneous Poisson Weibull Model}
 \usage{
-fit_weibull_model(data, results, l, Xwr, Xmr)
+fit_weibull_model(data, results, l)
 }
 \arguments{
 \item{data}{A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.}
@@ -17,10 +17,6 @@ fit_weibull_model(data, results, l, Xwr, Xmr)
 }}
 
 \item{l}{An integer specifying the index of the monitoring station to analyze.}
-
-\item{Xwr}{A matrix of covariates for the scale parameter associated with station \code{l}.}
-
-\item{Xmr}{A matrix of covariates for the shape parameter associated with station \code{l}.}
 }
 \value{
 A list containing:

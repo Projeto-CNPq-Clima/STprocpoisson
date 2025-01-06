@@ -9,8 +9,6 @@
 #'   - `Mbeta`: Samples for parameter Beta.
 #'   - `Malpha`: Samples for parameter Alpha.
 #' @param l An integer specifying the index of the monitoring station to analyze.
-#' @param Xwr A matrix of covariates for the scale parameter associated with station `l`.
-#' @param Xmr A matrix of covariates for the shape parameter associated with station `l`.
 #'
 #' @return A list containing:
 #' \describe{
@@ -21,16 +19,16 @@
 #'
 #' @export
 
-fit_weibull_modelSA <- function(data, resultsSA, l, Xwr, Xmr) {
+fit_weibull_modelSA <- function(data, resultsSA, l) {
 
   Mean <- NULL
   MatMean <- NULL
   for (i in 1:length(resultsSA$MW[, l])) {
     Gama <- exp(resultsSA$MW[i, l])
     Eta <- exp(resultsSA$MMj[i, l])
-    Delta <- resultsSA$MDelta[i, l]
-    Ff <- resultsSA$Mf[i, l]
-    Theta <- resultsSA$Mtheta[i, l]
+    Delta <- resultsSA$MDelta[i]
+    Ff <- resultsSA$Mf[i]
+    Theta <- resultsSA$Mtheta[i]
 
     gridt <- data[1:(length(data[, l]) - sum(is.na(data[, l]))), l]
 

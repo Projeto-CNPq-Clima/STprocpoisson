@@ -9,8 +9,6 @@
 #'   - `Mbeta`: Samples for parameter Beta.
 #'   - `Malpha`: Samples for parameter Alpha.
 #' @param l An integer specifying the index of the monitoring station to analyze.
-#' @param Xwr A matrix of covariates for the scale parameter associated with station `l`.
-#' @param Xmr A matrix of covariates for the shape parameter associated with station `l`.
 #'
 #' @return A list containing:
 #' \describe{
@@ -21,7 +19,7 @@
 #'
 #' @export
 
-fit_weibull_model <- function(data, results, l, Xwr, Xmr) {
+fit_weibull_model <- function(data, results, l) {
 
   Mean <- NULL
   MatMean <- NULL
