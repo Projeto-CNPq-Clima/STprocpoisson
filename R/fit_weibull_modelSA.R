@@ -4,7 +4,7 @@
 #' generates a plot of the observed and estimated cumulative mean functions, and returns relevant metrics.
 #'
 #' @param data A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.
-#' @param results A list containing the output from `STModelWeibullMCMC`, which includes:
+#' @param resultsSA A list containing the output from `STModelWeibullMCMCSA`, which includes:
 #'   - `MW`: Samples for parameter W.
 #'   - `Mbeta`: Samples for parameter Beta.
 #'   - `Malpha`: Samples for parameter Alpha.
@@ -21,22 +21,26 @@
 #'
 #' @export
 
-fit_weibull_model <- function(data, results, l, Xwr, Xmr) {
+fit_weibull_modelSA <- function(data, resultsSA, l, Xwr, Xmr) {
 
   Mean <- NULL
   MatMean <- NULL
-  for (i in 1:length(results$MW[, l])) {
-    Gama <- results$MW[i, l]
-    Eta <- results$MMj[i, l]
+  for (i in 1:length(resultsSA$MW[, l])) {
+    Gama <- exp(resultsSA$MW[i, l])
+    Eta <- exp(resultsSA$MMj[i, l])
+    Delta <- resultsSA$MDelta[i, l]
+    Ff <- resultsSA$Mf[i, l]
+    Theta <- resultsSA$Mtheta[i, l]
 
     gridt <- data[1:(length(data[, l]) - sum(is.na(data[, l]))), l]
 
-    Mean <- mf(Eta, Gama, gridt)
+
+    Mean <- mfSA(Delta,Eta,Gama,Ff,Theta,gridt)
 
     MatMean <- rbind(MatMean, t(as.matrix(Mean)))
   }
 
- retemp <- mtnp(gridt)[,1]
+  retemp <- mtnp(gridt)[,1]
 
   # Summary statistics for the estimated function
   medy1 <- apply(MatMean, 2, mean)
@@ -51,19 +55,19 @@ fit_weibull_model <- function(data, results, l, Xwr, Xmr) {
 
   # Plot the results
   plot(xx, yy,
-    type = "n", xlab = "Time", ylab = "Cumulative Mean Function",
-    xlim = c(infx, supx), ylim = c(infy, supy), cex.lab = 1.5
+       type = "n", xlab = "Time", ylab = "Cumulative Mean Function",
+       xlim = c(infx, supx), ylim = c(infy, supy), cex.lab = 1.5
   )
   polygon(xx, yy, col = "gray", border = NA)
   par(new = TRUE)
   plot(mtnp(data[, l]),
-    type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
-    xlab = "", ylab = "", main = paste("Station", l), col = "blue", lwd = 2
+       type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
+       xlab = "", ylab = "", main = paste("Station", l), col = "blue", lwd = 2
   )
   par(new = TRUE)
   plot(retemp, medy1,
-    type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
-    xlab = "", ylab = "", lwd = 2, col = "red"
+       type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
+       xlab = "", ylab = "", lwd = 2, col = "red"
   )
 
   # Return the results
