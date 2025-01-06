@@ -26,7 +26,7 @@ fit_weibull_modelSA <- function(data, resultsSA, l) {
   for (i in 1:length(resultsSA$MW[, l])) {
     Gama <- exp(resultsSA$MW[i, l])
     Eta <- exp(resultsSA$MMj[i, l])
-    Delta <- resultsSA$MDelta[i]
+    Delta <- resultsSA$Mdelta[i]
     Ff <- resultsSA$Mf[i]
     Theta <- resultsSA$Mtheta[i]
 
