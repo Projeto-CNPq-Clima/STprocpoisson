@@ -25,6 +25,13 @@
 #'
 #' @export
 interpolate_meanSA <- function(resultsSA, data, sites,Xm,Xw, Sites1, gridt, Xmr, Xwr) {
+  data<-as.matrix(data)
+  sites<-as.matrix(sites)
+  Sites1<-as.matrix(Sites1)
+  Xm<-as.matrix(Xm)
+  Xw<-as.matrix(Xw)
+  Xmr<-as.matrix(Xmr)
+  Xwr<-as.matrix(Xwr)
 
   Stotal <- rbind(sites, t(as.matrix(Sites1)))
   MatMean <- NULL
