@@ -18,9 +18,7 @@ STModelMusaOkumotoMCMC <- function(data, sites, prior = list(
                                      d4 = 1.005, aa2 = 2.01,
                                      bb2 = 1.005,
                                      c3 = (-2 * log(0.05) / max(dist(sites))),
-                                     d3 = 0.1, SU2 = 1000,
-                                     SU3 = 28.01968,
-                                     SU5 = 0.001118574
+                                     d3 = 0.1
                                    ), iteration, burnin) {
   b <- 1
   v <- 1
@@ -44,9 +42,9 @@ STModelMusaOkumotoMCMC <- function(data, sites, prior = list(
   c3 <- prior$c3
   d3 <- prior$d3
 
-  SU2 <- prior$SU2
-  SU3 <- prior$SU3
-  SU5 <- prior$SU5
+  SU2 = 1000
+  SU3 = 28.01968
+  SU5 = 0.001118574
 
   X <- cbind(as.matrix(rep(1, ncol(data))), as.matrix(sites))
   Psi <- as.matrix(rep(0, ncol(X)))

@@ -8,8 +8,7 @@ STModelMusaOkumotoMCMC(
   data,
   sites,
   prior = list(aa1 = 0.001, bb1 = 0.001, c2 = 1e-05, d2 = 0.001, c4 = 2.01, d4 = 1.005,
-    aa2 = 2.01, bb2 = 1.005, c3 = (-2 * log(0.05)/max(dist(sites))), d3 = 0.1, SU2 =
-    1000, SU3 = 28.01968, SU5 = 0.001118574),
+    aa2 = 2.01, bb2 = 1.005, c3 = (-2 * log(0.05)/max(dist(sites))), d3 = 0.1),
   iteration,
   burnin
 )
