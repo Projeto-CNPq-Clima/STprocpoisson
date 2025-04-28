@@ -1262,5 +1262,9 @@ amostrarfMUSAsa=function(ttheta,ddelta,WW,aalpha,yT,nn,TT,u1,a,b,ff){
 
 }
 
+######################### compute mean surface musa ######
+mfMUSA<-function(W,alpha,t){
 
-
+  x<-exp(W)*log(1+t/alpha)
+  return(x)
+}

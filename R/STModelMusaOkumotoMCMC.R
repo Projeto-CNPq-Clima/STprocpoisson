@@ -1,24 +1,55 @@
-#' Title
+#' Spatiotemporal Nonhomogeneous Poisson Model with Musa Okumoto Intensity (MCMC)
 #'
-#' @param data aaaa
-#' @param sites aaaa
-#' @param prior aaaa
-#' @param iteration aaaa
-#' @param burnin aaaaaa
+#' Performs a Markov Chain Monte Carlo (MCMC) procedure to estimate the parameters of a spatiotemporal
+#' nonhomogeneous Poisson model. This model is designed for analyzing extreme rainfall,
+#' as proposed by Fidel Ernesto Castro Morales & Daniele Torres Rodrigues.
 #'
-#' @return aaaaa
+#' @param data A matrix representing the occurrence times of the event of interest at each monitoring station. Each column corresponds
+#' to the occurrence times of a specific station. Dimensions: mxn, where `m` is the maximum number of occurrences
+#' across the stations, and `n` is the number of monitoring stations.
+#'
+#' @param sites A matrix with the geographic coordinates of the monitoring stations. Dimensions: nx2.
+#'
+#' @param X A list of covariates for the scale parameter of the Musa Okumoto intensity function. Defaults to a matrix combining
+#' a column of ones (intercept) and the coordinates in `sites`.
+#'
+#'
+#' @param prior A list of hyperparameters for the prior distributions of the model parameters:
+#'   \describe{
+#'     \item{Psi}{Multivariate normal distribution parameters `M` (mean vector) and `V` (covariance matrix). Default: `A1=0`, `B1=diag(100, ncol(X))`.}
+#'     \item{alpha}{Gamma distribution parameters `c2` and `d2`. Default:`c2=1e-05`,`d2=0.001`.}
+#'     \item{sigma^2_w}{Inverse Gamma distribution parameters `c4` and `d4`. Default: `c4=2.01`, `d4=1.005`.}
+#'     \item{phi_w}{Gamma distribution parameters `c3` and `d3`. Default: `c3=(-2*log(0.05)/max(dist(sites)))*0.1`, `d3=0.1`.}
+#'
+#'   }
+#'
+#' @param iteration Number of MCMC iterations.
+#'
+#' @param burnin Number of burn-in iterations to discard before the chains converge.
+#'
+#' @return A list containing:
+#' \describe{
+#'   \item{MW}{Samples of parameter W obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MWT}{A binary vector indicating whether each proposed value of W was accepted (1) or rejected (0). Used to compute the acceptance rate for W.}
+#'   \item{Malpha}{Samples of parameter alpha obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MalphaT}{A binary vector indicating whether each proposed value of alpha was accepted (1) or rejected (0). Used to compute the acceptance rate for alpha.}
+#'   \item{Mb}{Samples of parameter phi_w obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MbT}{A binary vector indicating whether each proposed value of phi_w was accepted (1) or rejected (0). Used to compute the acceptance rate for phi_w.}
+#'   \item{Mv}{Samples of parameter sigma^2_w obtained during the MCMC procedure (`iteration - burnin`).}'
+#'   \item{MPsi}{Samples of parameter Psi obtained during the MCMC procedure (`iteration - burnin`).}
+#'     }
+#'
 #' @export
-#'
-#'
-STModelMusaOkumotoMCMC <- function(data, sites, prior = list(
-                                     aa1 = 0.001, bb1 = 0.001,
-                                     c2 = 1e-05,
-                                     d2 = 0.001,
-                                     c4 = 2.01,
-                                     d4 = 1.005, aa2 = 2.01,
-                                     bb2 = 1.005,
-                                     c3 = (-2 * log(0.05) / max(dist(sites))),
-                                     d3 = 0.1
+
+STModelMusaOkumotoMCMC <- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))),(1/100)*sites),
+                                   prior = list(V=diag(100,ncol(X)),
+                                                M=as.matrix(rep(0,ncol(X))),
+                                                c2=1e-05,
+                                                d2=0.001,
+                                                c4=2.01,
+                                                d4=1.005,
+                                                c3=(-2*log(0.05)/max(dist(sites)))*0.1,
+                                                d3=0.1
                                    ), iteration, burnin) {
   b <- 1
   v <- 1
@@ -26,17 +57,13 @@ STModelMusaOkumotoMCMC <- function(data, sites, prior = list(
   W <- as.matrix(rep(0, ncol(data)))
   # Hiperparametros
 
-  aa1 <- prior$aa1
-  bb1 <- prior$bb1
+
 
   c2 <- prior$c2
   d2 <- prior$d2
 
   c4 <- prior$c4
   d4 <- prior$d4
-
-  aa2 <- prior$aa2
-  bb2 <- prior$bb2
 
 
   c3 <- prior$c3
@@ -46,13 +73,10 @@ STModelMusaOkumotoMCMC <- function(data, sites, prior = list(
   SU3 = 28.01968
   SU5 = 0.001118574
 
-  X <- cbind(as.matrix(rep(1, ncol(data))), as.matrix(sites))
-  Psi <- as.matrix(rep(0, ncol(X)))
-  A <- as.matrix(rep(0, ncol(X)))
-  B <- diag(100, ncol(X))
 
-  V <- diag(100, ncol(X))
-  M <- as.matrix(rep(0, ncol(X)))
+
+  V <- prior$V
+  M <- prior$M
 
   n <- ncol(data)
   m <- nrow(data)
@@ -156,7 +180,7 @@ STModelMusaOkumotoMCMC <- function(data, sites, prior = list(
       print(j)
     }
   }
-  resul <- list(SIGMA, DELTA, MW, MWT, Malpha, MalphaT, Mb, MbT, Mv, MPsi)
-  names(resul) <- c("SIGMA", "DELTA", "MW", "MWT", "Malpha", "MalphaT", "Mb", "MbT", "Mv", "MPsi")
+  resul <- list(MW, MWT, Malpha, MalphaT, Mb, MbT, Mv, MPsi)
+  names(resul) <- c("MW", "MWT", "Malpha", "MalphaT", "Mb", "MbT", "Mv", "MPsi")
   return(resul)
 }
