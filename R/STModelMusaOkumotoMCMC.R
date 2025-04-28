@@ -73,7 +73,7 @@ STModelMusaOkumotoMCMC <- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data
   SU3 = 28.01968
   SU5 = 0.001118574
 
-
+  Psi <- as.matrix(rep(0, ncol(X)))
 
   V <- prior$V
   M <- prior$M
