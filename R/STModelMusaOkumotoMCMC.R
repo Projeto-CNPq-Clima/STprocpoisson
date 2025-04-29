@@ -55,6 +55,9 @@ STModelMusaOkumotoMCMC <- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data
   v <- 1
   alpha <- 1
   W <- as.matrix(rep(0, ncol(data)))
+  data<- as.matrix(data)
+  sites<-as.matrix(sites)
+
   # Hiperparametros
 
 
