@@ -24,7 +24,7 @@
 #' @return A matrix (`MatMean`) containing the interpolated accumulated mean values at the times specified in `gridt`.
 #'
 #' @export
-interpolate_mean_weibull<- function(results, data, sites,Xw,Xm, Sites1, gridt, Xwr,Xmr) {
+interpolate_mean_weibull<- function(results, data, sites,Xw,Xm,Sites1,gridt,Xwr,Xmr) {
 
   data<-as.matrix(data)
   sites<-as.matrix(sites)
@@ -34,7 +34,7 @@ interpolate_mean_weibull<- function(results, data, sites,Xw,Xm, Sites1, gridt, X
   Xmr<-as.matrix(Xmr)
   Xwr<-as.matrix(Xwr)
 
-  Stotal <- rbind(sites, t(as.matrix(Sites1)))
+  Stotal <- rbind(sites, Sites1)
   MatMean <- NULL
   n <- nrow(sites)
 
