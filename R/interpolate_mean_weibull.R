@@ -13,10 +13,10 @@
 #'   - `MPsi`: Samples for regression coefficients Psi.
 #'   - `MBeta`: Samples for regression coefficients Beta.
 #' @param data A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.
-#' @param sites A matrix of geographic coordinates where the process was observed.
+#' @param sites A matrix of geographic coordinates where the process was observed nx2.
 #' @param Xw Covariates associated with the scale parameter at the location.
 #' @param Xm Covariates associated with the shape parameter at the location.
-#' @param Sites1 A vector representing the geographic coordinates of the location where interpolation is to be performed.
+#' @param Sites1 A vector representing the geographic coordinates of the location where interpolation is to be performed mx2.
 #' @param gridt A vector of times at which the accumulated mean is to be estimated.
 #' @param Xwr Covariates associated with the scale parameter at the location where interpolation is to be performed.
 #' @param Xmr Covariates associated with the shape parameter at the location where interpolation is to be performed.
@@ -42,7 +42,7 @@ interpolate_mean_weibull<- function(results, data, sites,Xw,Xm,Sites1,gridt,Xwr,
     SIGMAWtotal <- gSigma(results$Mbw[i], results$Mvw[i], Stotal)
     SIGMAWA12 <- t(as.matrix(SIGMAWtotal[1:n, (n + 1)]))
     SIGMAWA1 <- SIGMAWtotal[1:n, 1:n]
-    A2estw <- t(as.matrix(Xwr)) %*% as.matrix(results$MPsi[i, ]) +
+    A2estw <- Xwr %*% as.matrix(results$MPsi[i, ]) +
       SIGMAWA12 %*% solve(SIGMAWA1) %*% (as.matrix(results$MW[i, ]) - Xw %*% as.matrix(results$MPsi[i, ]))
     SIGMAA2estw <- SIGMAWtotal[(n + 1), (n + 1)] - SIGMAWA12 %*% solve(SIGMAWA1) %*% t(SIGMAWA12)
     WNO <- rnorm(1, A2estw, sd = sqrt(SIGMAA2estw))
@@ -52,7 +52,7 @@ interpolate_mean_weibull<- function(results, data, sites,Xw,Xm,Sites1,gridt,Xwr,
     SIGMAMtotal <- gSigma(results$Mbm[i], results$Mvm[i], Stotal)
     SIGMAMA12 <- t(as.matrix(SIGMAMtotal[1:n, (n + 1)]))
     SIGMAMA1 <- SIGMAMtotal[1:n, 1:n]
-    A2estm <- t(as.matrix(Xmr)) %*% as.matrix(results$MBeta[i, ]) +
+    A2estm <- Xmr %*% as.matrix(results$MBeta[i, ]) +
       SIGMAMA12 %*% solve(SIGMAMA1) %*% (as.matrix(results$MMj[i, ]) - Xm %*% as.matrix(results$MBeta[i, ]))
     SIGMAA2estm <- SIGMAMtotal[(n + 1), (n + 1)] - SIGMAMA12 %*% solve(SIGMAMA1) %*% t(SIGMAMA12)
     MNO <- rnorm(1, A2estm, sd = sqrt(SIGMAA2estm))

@@ -21,13 +21,13 @@ interpolate_mean_weibull(results, data, sites, Xw, Xm, Sites1, gridt, Xwr, Xmr)
 
 \item{data}{A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.}
 
-\item{sites}{A matrix of geographic coordinates where the process was observed.}
+\item{sites}{A matrix of geographic coordinates where the process was observed nx2.}
 
 \item{Xw}{Covariates associated with the scale parameter at the location.}
 
 \item{Xm}{Covariates associated with the shape parameter at the location.}
 
-\item{Sites1}{A vector representing the geographic coordinates of the location where interpolation is to be performed.}
+\item{Sites1}{A vector representing the geographic coordinates of the location where interpolation is to be performed mx2.}
 
 \item{gridt}{A vector of times at which the accumulated mean is to be estimated.}
 
