@@ -28,7 +28,7 @@ interpolate_mean_musa<- function(results, data, sites,Xw, Sites1, gridt, Xwr) {
   Xw<-as.matrix(Xw)
   Xwr<-as.matrix(Xwr)
 
-  Stotal <- rbind(sites, t(as.matrix(Sites1)))
+  Stotal <- rbind(sites, Sites1)
   MatMean <- NULL
   n <- nrow(sites)
 
@@ -36,7 +36,7 @@ interpolate_mean_musa<- function(results, data, sites,Xw, Sites1, gridt, Xwr) {
     SIGMAWtotal <- gSigma(results$Mb[i], results$Mv[i], Stotal)
     SIGMAWA12 <- t(as.matrix(SIGMAWtotal[1:n, (n + 1)]))
     SIGMAWA1 <- SIGMAWtotal[1:n, 1:n]
-    A2estw <- t(as.matrix(Xwr)) %*% as.matrix(results$MPsi[i, ]) +
+    A2estw <- Xwr %*% as.matrix(results$MPsi[i, ]) +
       SIGMAWA12 %*% solve(SIGMAWA1) %*% (as.matrix(results$MW[i, ]) - Xw %*% as.matrix(results$MPsi[i, ]))
     SIGMAA2estw <- SIGMAWtotal[(n + 1), (n + 1)] - SIGMAWA12 %*% solve(SIGMAWA1) %*% t(SIGMAWA12)
     WNO <- rnorm(1, A2estw, sd = sqrt(SIGMAA2estw))
