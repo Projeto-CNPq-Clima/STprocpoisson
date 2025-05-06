@@ -21,12 +21,12 @@ compute_mean_surfaceSA(resultsSA, sites, X, Z, DNO, CovXNO, CovZNO, tau)
 \item \code{Mbm}: Samples for parameter phi_m.
 \item \code{MbmT}: Acceptance indicators for phi_m.
 \item \code{MPsi}: Samples for parameter Psi.
-\item \code{Mdelta} : aaaaa
-\item \code{MdeltaT} : aaaaa
-\item \code{Mtheta} : aaaaa
-\item \code{MthetaT} : aaaaa
-\item \code{Mf} : aaaaa
-\item \code{MfT} : aaaaa
+\item \code{Mdelta} : Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).
+\item \code{MdeltaT} : A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for delta.
+\item \code{Mtheta} : Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).
+\item \code{MthetaT} : A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for theta.
+\item \code{Mf} : Samples of parameter f obtained during the MCMC procedure (iteration - burnin).
+\item \code{MfT} : A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for f.
 }}
 
 \item{sites}{A matrix with geographic coordinates of the monitoring stations.}
