@@ -17,12 +17,13 @@
 #'   - `Mbm`: Samples for parameter phi_m.
 #'   - `MbmT`: Acceptance indicators for phi_m.
 #'   - `MPsi`: Samples for parameter Psi.
-#'   - `Mdelta` : aaaaa
-#'   - `MdeltaT` : aaaaa
-#'   - `Mtheta` : aaaaa
-#'   - `MthetaT` : aaaaa
-#'   - `Mf` : aaaaa
-#'   - `MfT` : aaaaa
+#'   - `Mdelta` : Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).
+#'   - `MdeltaT` : A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for delta.
+#'   - `Mtheta` : Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).
+#'   - `MthetaT` : A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for theta.
+#'   - `Mf` : Samples of parameter f obtained during the MCMC procedure (iteration - burnin).
+#'   - `MfT` : A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for f.
+#'
 #' @param sites A matrix with geographic coordinates of the monitoring stations.
 #' @param X Covariates for the scale parameter of the Weibull intensity.
 #' @param Z Covariates for the shape parameter of the Weibull intensity.
