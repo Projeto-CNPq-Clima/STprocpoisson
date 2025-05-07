@@ -2,36 +2,59 @@
 % Please edit documentation in R/STModelMusaOkumotoMCMCSA.R
 \name{STModelMusaOkumotoMCMCSA}
 \alias{STModelMusaOkumotoMCMCSA}
-\title{Title}
+\title{Spatiotemporal Nonhomogeneous Poisson Model with Musa Okumoto Intensity Function and Seasonal Component}
 \usage{
 STModelMusaOkumotoMCMCSA(
   data,
   sites,
   X = cbind(as.matrix(rep(1, ncol(data))), (1/100) * sites),
-  prior = list(Psi = as.matrix(rep(0, ncol(X))), A = as.matrix(rep(0, ncol(X))), B =
-    diag(100, ncol(X)), V = diag(100, ncol(X)), M = as.matrix(rep(0, ncol(X))), c2 =
-    1e-05, d2 = 0.001, c4 = 2.01, d4 = 1.005, aa2 = 2.01, bb2 = 1.005, aa1 = 2.01, bb1 =
-    1.005, c3 = (-2 * log(0.05)/max(dist(sites))) * 0.1, d3 = 0.1),
+  prior = list(Psi = as.matrix(rep(0, ncol(X))), V = diag(100, ncol(X)), M =
+    as.matrix(rep(0, ncol(X))), c2 = 1e-05, d2 = 0.001, c4 = 2.01, d4 = 1.005, aa1 =
+    2.01, bb1 = 1.005, c3 = (-2 * log(0.05)/max(dist(sites))) * 0.1, d3 = 0.1),
   iteration,
   burnin
 )
 }
 \arguments{
-\item{data}{aaaa}
+\item{data}{A matrix representing the occurrence times of the event of interest at each monitoring station. Each column corresponds
+to the occurrence times of a specific station. Dimensions: mxn, where \code{m} is the maximum number of occurrences
+across the stations, and \code{n} is the number of monitoring stations.}
 
-\item{sites}{aaaa}
+\item{sites}{A matrix with the geographic coordinates of the monitoring stations. Dimensions: nx2.}
 
-\item{X}{aaaa}
+\item{X}{A list of covariates for the scale parameter of the Musa Okumoto intensity function. Defaults to a matrix combining
+a column of ones (intercept) and the coordinates in \code{sites}.}
 
-\item{prior}{aaaa}
+\item{prior}{A list of hyperparameters for the prior distributions of the model parameters:
+\describe{
+\item{Psi}{Multivariate normal distribution parameters \code{M} (mean vector) and \code{V} (covariance matrix). Default: \code{A1=0}, \code{B1=diag(100, ncol(X))}.}
+\item{alpha}{Gamma distribution parameters \code{c2} and \code{d2}. Default:\code{c2=1e-05},\code{d2=0.001}.}
+\item{sigma^2_w}{Inverse Gamma distribution parameters \code{c4} and \code{d4}. Default: \code{c4=2.01}, \code{d4=1.005}.}
+\item{phi_w}{Gamma distribution parameters \code{c3} and \code{d3}. Default: \code{c3=(-2*log(0.05)/max(dist(sites)))*0.1}, \code{d3=0.1}.}
+\item{delta}{arcsine distribution \code{p(delta)=k(delta(d-delta))^{-1/2}}, \code{d=100}.}
+\item{f}{arcsine distribution \code{p(f)=k((f-af)(bf-f))^{-1/2}}, \code{af=1/(365+10)}, \code{bf=1/(365-10)}.}
+\item{theta}{arcsine distribution \verb{p(theta)=k((theta)(2pi-theta))^\{-1/2\}}.}
+}}
 
-\item{iteration}{aaaa}
+\item{iteration}{Number of MCMC iterations.}
 
-\item{burnin}{aaaa}
+\item{burnin}{Number of burn-in iterations to discard before the chains converge.}
 }
 \value{
-aaaa
+A list containing:
+\describe{
+\item{MW}{Samples of parameter W obtained during the MCMC procedure (\code{iteration - burnin}).}
+\item{MWT}{A binary vector indicating whether each proposed value of W was accepted (1) or rejected (0). Used to compute the acceptance rate for W.}
+\item{Malpha}{Samples of parameter alpha obtained during the MCMC procedure (\code{iteration - burnin}).}
+\item{MalphaT}{A binary vector indicating whether each proposed value of alpha was accepted (1) or rejected (0). Used to compute the acceptance rate for alpha.}
+\item{Mb}{Samples of parameter phi_w obtained during the MCMC procedure (\code{iteration - burnin}).}
+\item{MbT}{A binary vector indicating whether each proposed value of phi_w was accepted (1) or rejected (0). Used to compute the acceptance rate for phi_w.}
+\item{Mv}{Samples of parameter sigma^2_w obtained during the MCMC procedure (\code{iteration - burnin}).}'
+\item{MPsi}{Samples of parameter Psi obtained during the MCMC procedure (\code{iteration - burnin}).}
+}
 }
 \description{
-Title
+Performs a Markov Chain Monte Carlo (MCMC) procedure to estimate the parameters of a spatiotemporal
+nonhomogeneous Poisson model with a seasonal component. This model is designed for analyzing extreme rainfall,
+as proposed by Fidel Ernesto Castro Morales & Daniele Torres Rodrigues.
 }

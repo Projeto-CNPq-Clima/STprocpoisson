@@ -47,7 +47,7 @@ interpolate_mean_weibull<- function(results,data,sites,Xw,Xm,Sites1,gridt,Xwr,Xm
     SIGMAA2estw <- SIGMAWtotal[(n + 1), (n + 1)] - SIGMAWA12 %*% solve(SIGMAWA1) %*% t(SIGMAWA12)
     WNO <- rnorm(1, A2estw, sd = sqrt(SIGMAA2estw))
 
-    Gama <- exp(WNO)
+    Gama <- WNO
 
     SIGMAMtotal <- gSigma(results$Mbm[i], results$Mvm[i], Stotal)
     SIGMAMA12 <- t(as.matrix(SIGMAMtotal[1:n, (n + 1)]))
@@ -57,11 +57,11 @@ interpolate_mean_weibull<- function(results,data,sites,Xw,Xm,Sites1,gridt,Xwr,Xm
     SIGMAA2estm <- SIGMAMtotal[(n + 1), (n + 1)] - SIGMAMA12 %*% solve(SIGMAMA1) %*% t(SIGMAMA12)
     MNO <- rnorm(1, A2estm, sd = sqrt(SIGMAA2estm))
 
-    Eta <- exp(MNO)
+    Eta <- MNO
 
     vect <- NULL
     for (j in 1:length(gridt)) {
-      Mean <- MeanFunction(Eta, Gama, gridt[j])
+      Mean <- mfWEIBULL(Gama,Eta,gridt[j])
       vect <- c(vect, Mean)
     }
 

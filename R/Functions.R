@@ -695,12 +695,12 @@ MeanFunction <- function(eta, gama, t) {
 ############### compute mean surface
 
 
-mf <- function(Wl, Ml, tau) {
+mfWEIBULL <- function(Wl, Ml, tau) {
 res <- exp(Wl) * tau^(exp(Ml))
 res
 }
 ###################################3
-mfSA<-function(delta,eta,gama,f,ttheta,t){
+mfWEIBULLSA<-function(delta,eta,gama,f,ttheta,t){
 
   res=gama*t^eta+delta*cos(2*pi*f*t+ttheta)
   res
@@ -1268,3 +1268,16 @@ mfMUSA<-function(W,alpha,t){
   x<-exp(W)*log(1+t/alpha)
   return(x)
 }
+
+
+
+mfMUSASA<-function(W,alpha,t,delta,f,ttheta){
+
+  x<-exp(W)*log(1+t/alpha)+delta*cos(2*pi*f*t+ttheta)
+  return(x)
+}
+
+
+
+
+

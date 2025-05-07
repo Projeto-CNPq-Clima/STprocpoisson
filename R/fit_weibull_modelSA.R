@@ -8,6 +8,9 @@
 #'   - `MW`: Samples for parameter W.
 #'   - `Mbeta`: Samples for parameter Beta.
 #'   - `Malpha`: Samples for parameter Alpha.
+#'   - `Mdelta`: Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mtheta`: Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mf`: Samples of parameter f obtained during the MCMC procedure (iteration - burnin).
 #' @param l An integer specifying the index of the monitoring station to analyze.
 #'
 #' @return A list containing:
@@ -33,7 +36,7 @@ fit_weibull_modelSA <- function(data, resultsSA, l) {
     gridt <- data[1:(length(data[, l]) - sum(is.na(data[, l]))), l]
 
 
-    Mean <- mfSA(Delta,Eta,Gama,Ff,Theta,gridt)
+    Mean <- mfWEIBULLSA(Delta,Eta,Gama,Ff,Theta,gridt)
 
     MatMean <- rbind(MatMean, t(as.matrix(Mean)))
   }

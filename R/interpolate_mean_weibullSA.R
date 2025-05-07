@@ -12,6 +12,9 @@
 #'   - `Mbm`: Samples for spatial decay phi_m.
 #'   - `MPsi`: Samples for regression coefficients Psi.
 #'   - `MBeta`: Samples for regression coefficients Beta.
+#'   - `Mdelta`: Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mtheta`: Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mf`: Samples of parameter f obtained during the MCMC procedure (iteration - burnin).
 #' @param data A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.
 #' @param sites A matrix of geographic coordinates where the process was observed.
 #' @param Xw Covariates associated with the scale parameter at the location.
@@ -65,7 +68,7 @@ interpolate_mean_weibullSA <- function(resultsSA, data, sites,Xm,Xw, Sites1, gri
     for (j in 1:length(gridt)) {
 
       #delta,eta,gama,f,ttheta,t
-      Mean <- mfSA(Delta,Eta,Gama,Ff,Theta,gridt[j])
+      Mean <- mfWEIBULLSA(Delta,Eta,Gama,Ff,Theta,gridt[j])
       vect <- c(vect, Mean)
     }
 

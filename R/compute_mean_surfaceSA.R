@@ -108,7 +108,7 @@ compute_mean_surfaceSA <- function(resultsSA, sites, X, Z, DNO, CovXNO, CovZNO, 
   Meanmf <- NULL
   for (i in 1:length(tau)) {
     for (h in 1:nrow(MW)) {
-      MfmNO <- rbind(MfmNO, t(as.matrix(mfSA(Mdelta[h],exp(MMNO[h,]),exp(MWNO[h,]),Mf[h],Mtheta[h],tau[i]))))
+      MfmNO <- rbind(MfmNO, t(as.matrix(mfWEIBULLSA(Mdelta[h],exp(MMNO[h,]),exp(MWNO[h,]),Mf[h],Mtheta[h],tau[i]))))
     }
 
     Meanmf <- cbind(Meanmf, as.matrix(apply(MfmNO, 2, mean)))

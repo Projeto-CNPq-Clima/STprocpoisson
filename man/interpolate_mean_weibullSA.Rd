@@ -27,6 +27,9 @@ interpolate_mean_weibullSA(
 \item \code{Mbm}: Samples for spatial decay phi_m.
 \item \code{MPsi}: Samples for regression coefficients Psi.
 \item \code{MBeta}: Samples for regression coefficients Beta.
+\item \code{Mdelta}: Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).
+\item \code{Mtheta}: Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).
+\item \code{Mf}: Samples of parameter f obtained during the MCMC procedure (iteration - burnin).
 }}
 
 \item{data}{A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.}

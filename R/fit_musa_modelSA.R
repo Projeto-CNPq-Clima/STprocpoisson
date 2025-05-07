@@ -1,13 +1,16 @@
-#' Fit and Plot Nonhomogeneous Poisson Weibull Model
+#' Fit and Plot Nonhomogeneous Poisson Musa Okumoto Model
 #'
 #' This function fits a nonhomogeneous Poisson Weibull model to data from a specified monitoring station,
 #' generates a plot of the observed and estimated cumulative mean functions, and returns relevant metrics.
 #'
 #' @param data A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.
-#' @param results A list containing the output from `STModelWeibullMCMC`, which includes:
+#' @param results A list containing the output from `STModelMusaOkumotoMCMCSA`, which includes:
 #'   - `MW`: Samples for parameter W.
-#'   - `Mbeta`: Samples for parameter Beta.
 #'   - `Malpha`: Samples for parameter Alpha.
+#'   - `Mdelta` : Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mtheta` : Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mf` : Samples of parameter f obtained during the MCMC procedure (iteration - burnin).
+#'
 #' @param l An integer specifying the index of the monitoring station to analyze.
 #'
 #' @return A list containing:
@@ -19,22 +22,24 @@
 #'
 #' @export
 
-fit_weibull_model <- function(data, results, l) {
+fit_musa_modelSA <- function(data, results, l) {
 
   Mean <- NULL
   MatMean <- NULL
   for (i in 1:length(results$MW[, l])) {
     Gama <- results$MW[i, l]
-    Eta <- results$MMj[i, l]
-
+    alpha<- results$Malpha[i]
+    delta<- results$Mdelta[i]
+    theta<-results$Mtheta[i]
+    f<-results$Mf[i]
     gridt <- data[1:(length(data[, l]) - sum(is.na(data[, l]))), l]
 
-    Mean <- mfWEIBULL(Eta, Gama, gridt)
+    Mean <- mfMUSASA(Gama,alpha,gridt,delta,f,theta)  #W,alpha,t,delta,pi,f,theta
 
     MatMean <- rbind(MatMean, t(as.matrix(Mean)))
   }
 
- retemp <- mtnp(gridt)[,1]
+  retemp <- mtnp(gridt)[,1]
 
   # Summary statistics for the estimated function
   medy1 <- apply(MatMean, 2, mean)
@@ -49,19 +54,19 @@ fit_weibull_model <- function(data, results, l) {
 
   # Plot the results
   plot(xx, yy,
-    type = "n", xlab = "Time", ylab = "Cumulative Mean Function",
-    xlim = c(infx, supx), ylim = c(infy, supy), cex.lab = 1.5
+       type = "n", xlab = "Time", ylab = "Cumulative Mean Function",
+       xlim = c(infx, supx), ylim = c(infy, supy), cex.lab = 1.5
   )
   polygon(xx, yy, col = "gray", border = NA)
   par(new = TRUE)
   plot(mtnp(data[, l]),
-    type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
-    xlab = "", ylab = "", main = paste("Station", l), col = "blue", lwd = 2
+       type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
+       xlab = "", ylab = "", main = paste("Station", l), col = "blue", lwd = 2
   )
   par(new = TRUE)
   plot(retemp, medy1,
-    type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
-    xlab = "", ylab = "", lwd = 2, col = "red"
+       type = "l", xlim = c(infx, supx), ylim = c(infy, supy),
+       xlab = "", ylab = "", lwd = 2, col = "red"
   )
 
   # Return the results
