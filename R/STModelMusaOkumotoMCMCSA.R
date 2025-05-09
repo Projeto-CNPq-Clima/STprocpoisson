@@ -57,15 +57,14 @@ STModelMusaOkumotoMCMCSA <- function(data, sites,X=cbind(as.matrix(rep(1,ncol(da
                                                   d3=0.1
                                      ), iteration, burnin) {
 
-
-
 b=1
 v=1
 alpha=5000
 theta=pi/2
 delta=0.001
 f=1/365
-
+X=as.matrix(X)
+Psi=as.matrix(Psi)
 W=as.matrix(rep(10,ncol(data)))
 
 #Hiperparametros
@@ -129,7 +128,6 @@ Mb=NULL
 MbT=NULL
 
 
-
 #############################
 ## Programa principal
 ############################3
@@ -176,9 +174,9 @@ for(j in 1:iteration){
     Psi=as.matrix(MASS::mvrnorm(1,AA,BB))
 
 
-    SU2=sintonizar(burnin,0.30,SU2,MalphaT,j)
-    SU3=sintonizar(burnin,0.44,SU3,MbT,j)
-    SU5=sintonizarN(burnin,0.25,SU5,MWT,j)
+    SU2=sintonizarMUSA(burnin,0.30,SU2,MalphaT,j)
+    SU3=sintonizarMUSA(burnin,0.44,SU3,MbT,j)
+    SU5=sintonizarNMUSA(burnin,0.25,SU5,MWT,j)
     print(j)
 
 
@@ -244,4 +242,6 @@ names(RESUL)<-c("MW","MWT","MPsi","Mv","Mb","MbT","Malpha","MalphaT","Mdelta","M
 return(RESUL)
 
 }
+
+
 

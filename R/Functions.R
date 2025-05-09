@@ -1053,8 +1053,8 @@ amostrarWMUSAsa=function(aalpha,WW,ddelta,ttheta,data,TT,ff,loca,X,Psi,b,v,u1){
 
   SSig=gSigma(b,v,loca)
 
-  postW=logverosa(aalpha,WW,ddelta,ttheta,data,TT,ff)-0.5*t(WW-X%*%Psi)%*%solve(SSig)%*%(WW-X%*%Psi)
-  postWprop=logverosa(aalpha,Wprop,ddelta,ttheta,data,TT,ff)-0.5*t(Wprop-X%*%Psi)%*%solve(SSig)%*%(Wprop-X%*%Psi)
+  postW=logveroMUSAsa(aalpha,WW,ddelta,ttheta,data,TT,ff)-0.5*t(WW-X%*%Psi)%*%solve(SSig)%*%(WW-X%*%Psi)
+  postWprop=logveroMUSAsa(aalpha,Wprop,ddelta,ttheta,data,TT,ff)-0.5*t(Wprop-X%*%Psi)%*%solve(SSig)%*%(Wprop-X%*%Psi)
   prob=min(exp((postWprop)-(postW)),1)
 
 
@@ -1113,9 +1113,9 @@ amostraralphaMUSAsa=function(aalpha,WW,TT,ttheta,ddelta,c1,d1,data,ff,u1){
   }
 
 
-  palpha=(c1-1)*log(aalpha)-d1*aalpha + logverosa(aalpha,WW,ddelta,ttheta,data,TT,ff)
+  palpha=(c1-1)*log(aalpha)-d1*aalpha + logveroMUSAsa(aalpha,WW,ddelta,ttheta,data,TT,ff)
 
-  palphaprop=(c1-1)*log(alphaprop)-d1*alphaprop + logverosa(alphaprop,WW,ddelta,ttheta,data,TT,ff)
+  palphaprop=(c1-1)*log(alphaprop)-d1*alphaprop + logveroMUSAsa(alphaprop,WW,ddelta,ttheta,data,TT,ff)
 
   logprob<-palphaprop+log(dgamma(aalpha,alphaprop*u1, rate=u1))-(palpha + log(dgamma(alphaprop,aalpha*u1, rate=u1)))
 
@@ -1157,9 +1157,9 @@ amostrardeltaMUSAsa=function(ttheta,ddelta,WW,aalpha,yT,nn,TT,u1,f,d){
   }
 
 
-  logp=logverosa(aalpha,WW,ddelta,ttheta,yT,TT,f)-0.5*(log(ddelta)+log(d-ddelta))
+  logp=logveroMUSAsa(aalpha,WW,ddelta,ttheta,yT,TT,f)-0.5*(log(ddelta)+log(d-ddelta))
 
-  logpprop=logverosa(aalpha,WW,deltaprop,ttheta,yT,TT,f)-0.5*(log(deltaprop)+log(d-deltaprop))
+  logpprop=logveroMUSAsa(aalpha,WW,deltaprop,ttheta,yT,TT,f)-0.5*(log(deltaprop)+log(d-deltaprop))
 
   logprob=logpprop+log( dunif( ddelta, max(0,deltaprop-u1), min(d,deltaprop+u1) ) )-( logp+log( dunif( deltaprop, max(0,ddelta-u1), min(d,ddelta+u1) ) ) )
 
@@ -1194,9 +1194,9 @@ amostrarthetaMUSAsa=function(ttheta,ddelta,WW,aalpha,yT,nn,TT,u1,f){
 
   thetaprop=runif(1,max(0,ttheta-u1),min(ttheta+u1,2*pi))
 
-  logp=logverosa(aalpha,WW,ddelta,ttheta,yT,TT,f)-0.5*(log(ttheta)+log(2*pi-ttheta))
+  logp=logveroMUSAsa(aalpha,WW,ddelta,ttheta,yT,TT,f)-0.5*(log(ttheta)+log(2*pi-ttheta))
 
-  logpprop=logverosa(aalpha,WW,ddelta,thetaprop,yT,TT,f)-0.5*(log(thetaprop)+log(2*pi-thetaprop))
+  logpprop=logveroMUSAsa(aalpha,WW,ddelta,thetaprop,yT,TT,f)-0.5*(log(thetaprop)+log(2*pi-thetaprop))
 
   logprob=logpprop+log( dunif( ttheta, max(0,thetaprop-u1), min(2*pi,thetaprop+u1) ) )-( logp+log( dunif( thetaprop, max(0,ttheta-u1), min(2*pi,ttheta+u1) ) ) )
 
@@ -1230,9 +1230,9 @@ amostrarfMUSAsa=function(ttheta,ddelta,WW,aalpha,yT,nn,TT,u1,a,b,ff){
 
   fprop=runif(1,max(a,ff-u1),min(ff+u1,b))
 
-  logp=logverosa(aalpha,WW,ddelta,ttheta,yT,TT,ff)-0.5*(log(ff-a)+log(b-ff))
+  logp=logveroMUSAsa(aalpha,WW,ddelta,ttheta,yT,TT,ff)-0.5*(log(ff-a)+log(b-ff))
 
-  logpprop=logverosa(aalpha,WW,ddelta,ttheta,yT,TT,fprop)-0.5*(log(fprop-a)+log(b-fprop))
+  logpprop=logveroMUSAsa(aalpha,WW,ddelta,ttheta,yT,TT,fprop)-0.5*(log(fprop-a)+log(b-fprop))
 
   logprob=logpprop+log( dunif( ff, max(a,fprop-u1), min(b,fprop+u1) ) )-( logp+log( dunif( fprop, max(a,ff-u1), min(b,ff+u1) ) ) )
 
