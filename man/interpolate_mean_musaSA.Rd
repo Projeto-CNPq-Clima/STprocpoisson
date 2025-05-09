@@ -36,5 +36,5 @@ A matrix (\code{MatMean}) containing the interpolated accumulated mean values at
 }
 \description{
 This function interpolates the accumulated mean values for a location where no data was observed,
-using outputs from the STModelMusaOkumotoMCMC model. The interpolation is performed over a vector of times.
+using outputs from the STModelMusaOkumotoMCMCSA model. The interpolation is performed over a vector of times.
 }

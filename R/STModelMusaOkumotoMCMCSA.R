@@ -33,12 +33,17 @@
 #' \describe{
 #'   \item{MW}{Samples of parameter W obtained during the MCMC procedure (`iteration - burnin`).}
 #'   \item{MWT}{A binary vector indicating whether each proposed value of W was accepted (1) or rejected (0). Used to compute the acceptance rate for W.}
-#'   \item{Malpha}{Samples of parameter alpha obtained during the MCMC procedure (`iteration - burnin`).}
-#'   \item{MalphaT}{A binary vector indicating whether each proposed value of alpha was accepted (1) or rejected (0). Used to compute the acceptance rate for alpha.}
-#'   \item{Mb}{Samples of parameter phi_w obtained during the MCMC procedure (`iteration - burnin`).}
-#'   \item{MbT}{A binary vector indicating whether each proposed value of phi_w was accepted (1) or rejected (0). Used to compute the acceptance rate for phi_w.}
-#'   \item{Mv}{Samples of parameter sigma^2_w obtained during the MCMC procedure (`iteration - burnin`).}'
 #'   \item{MPsi}{Samples of parameter Psi obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{Mv}{Samples of parameter sigma^2_w obtained during the MCMC procedure (`iteration - burnin`).}'
+#'   \item{Mb}{Samples of parameter phi_w obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MbT}{A binary vector indicating whether each proposed value of phi_w was accepted (1) or rejected (0). Used to compute the acceptance rate for phi_w.}#'   \item{Malpha}{Samples of parameter alpha obtained during the MCMC procedure (`iteration - burnin`).}
+#'   \item{MalphaT}{A binary vector indicating whether each proposed value of alpha was accepted (1) or rejected (0). Used to compute the acceptance rate for alpha.}
+#'   \item{Mdelta}{Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).}
+#'   \item{MdeltaT}{A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for delta.}
+#'   \item{Mtheta}{Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).}
+#'   \item{MthetaT}{A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for theta.}
+#'   \item{Mf}{Samples of parameter f obtained during the MCMC procedure (iteration - burnin).}
+#'   \item{MfT}{A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for f.}
 #'     }
 #'
 #' @export

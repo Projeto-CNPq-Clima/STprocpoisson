@@ -38,7 +38,6 @@ for each temporal point in \code{tau}. The first column contains the mean values
 time step, and subsequent columns contain the differences between consecutive time steps.
 }
 \description{
-This function interpolates the mean values on a grid of points (\code{DNO}) for a spatiotemporal
-nonhomogeneous Poisson model with Weibull intensity. The function utilizes the MCMC outputs
-from \code{STModelMusaOkMCMCSA} and applies a Gaussian process-based interpolation.
+This function interpolates the mean values on a grid of points (\code{DNO}) for a spatiotemporal nonhomogeneous Poisson model with Musa Okumoto intensity with a seasonal component.
+The function utilizes the MCMC outputs from \code{STModelMusaOkMCMCSA} and applies a Gaussian process-based interpolation.
 }

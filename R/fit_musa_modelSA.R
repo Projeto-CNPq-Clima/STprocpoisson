@@ -1,6 +1,6 @@
 #' Fit and Plot Nonhomogeneous Poisson Musa Okumoto Model
 #'
-#' This function fits a nonhomogeneous Poisson Weibull model to data from a specified monitoring station,
+#' This function fits a nonhomogeneous Poisson Musa Okumoto model with a seasonal component. to data from a specified monitoring station,
 #' generates a plot of the observed and estimated cumulative mean functions, and returns relevant metrics.
 #'
 #' @param data A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.

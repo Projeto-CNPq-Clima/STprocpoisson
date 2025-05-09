@@ -1,8 +1,7 @@
 #' Compute Interpolated Mean Surface for Spatiotemporal Model
 #'
-#' This function interpolates the mean values on a grid of points (`DNO`) for a spatiotemporal
-#' nonhomogeneous Poisson model with Weibull intensity. The function utilizes the MCMC outputs
-#' from `STModelMusaOkMCMCSA` and applies a Gaussian process-based interpolation.
+#' This function interpolates the mean values on a grid of points (`DNO`) for a spatiotemporal nonhomogeneous Poisson model with Musa Okumoto intensity with a seasonal component.
+#' The function utilizes the MCMC outputs from `STModelMusaOkMCMCSA` and applies a Gaussian process-based interpolation.
 #'
 #' @param results A list containing the output from `STModelMusaOkumotoMCMCSA`, including:
 #'   - `MW`: Samples for parameter W.

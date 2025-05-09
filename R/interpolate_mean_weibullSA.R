@@ -1,7 +1,7 @@
 #' Interpolate Accumulated Mean Values at an Unobserved Location
 #'
 #' This function interpolates the accumulated mean values for a location where no data was observed,
-#' using outputs from the STModelWeibullMCMC model. The interpolation is performed over a vector of times.
+#' using outputs from the STModelWeibullMCMCSA model. The interpolation is performed over a vector of times.
 #'
 #' @param resultsSA A list containing the output from `STModelWeibullMCMCSA`, including:
 #'   - `MW`: Samples for parameter W.
