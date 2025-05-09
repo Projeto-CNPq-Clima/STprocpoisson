@@ -44,8 +44,7 @@
 #' @export
 
 STModelMusaOkumotoMCMCSA <- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))),(1/100)*sites),
-                                     prior = list(Psi=as.matrix(rep(0,ncol(X))),
-                                                  V=diag(100,ncol(X)),
+                                     prior = list(V=diag(100,ncol(X)),
                                                   M=as.matrix(rep(0,ncol(X))),
                                                   c2=1e-05,
                                                   d2=0.001,
@@ -64,7 +63,7 @@ theta=pi/2
 delta=0.001
 f=1/365
 X=as.matrix(X)
-Psi=as.matrix(Psi)
+Psi <- as.matrix(rep(0, ncol(X)))
 W=as.matrix(rep(10,ncol(data)))
 
 #Hiperparametros
@@ -81,7 +80,6 @@ d4=prior$d4
 c3=prior$c3
 d3=prior$d3
 
-Psi=prior$Psi
 A=prior$A
 B=prior$B
 

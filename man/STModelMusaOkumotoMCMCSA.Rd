@@ -8,9 +8,9 @@ STModelMusaOkumotoMCMCSA(
   data,
   sites,
   X = cbind(as.matrix(rep(1, ncol(data))), (1/100) * sites),
-  prior = list(Psi = as.matrix(rep(0, ncol(X))), V = diag(100, ncol(X)), M =
-    as.matrix(rep(0, ncol(X))), c2 = 1e-05, d2 = 0.001, c4 = 2.01, d4 = 1.005, aa1 =
-    2.01, bb1 = 1.005, c3 = (-2 * log(0.05)/max(dist(sites))) * 0.1, d3 = 0.1),
+  prior = list(V = diag(100, ncol(X)), M = as.matrix(rep(0, ncol(X))), c2 = 1e-05, d2 =
+    0.001, c4 = 2.01, d4 = 1.005, aa1 = 2.01, bb1 = 1.005, c3 = (-2 *
+    log(0.05)/max(dist(sites))) * 0.1, d3 = 0.1),
   iteration,
   burnin
 )
