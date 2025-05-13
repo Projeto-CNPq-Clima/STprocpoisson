@@ -848,7 +848,6 @@ amostrardeltaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,d){
 #############################################################
 amostrarfGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,a,b){
 
-
   fprop=runif(1,max(a,ff-u1),min(ff+u1,b))
 
   logp=GG2(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(ff-a)+log(b-ff))

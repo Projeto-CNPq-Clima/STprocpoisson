@@ -27,6 +27,10 @@ STModelGoelMCMCSA<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))),si
                                               c3=(-2*log(0.05)/max(dist(sites)))*0.1,
                                               d3=0.1),iteration,burnin){
 
+
+X<-as.matrix(X)
+Z<-as.matrix(Z)
+Fj<-as.matrix(Fj)
 #Valores iniciais
 theta=3.525654
 delta=0.01
