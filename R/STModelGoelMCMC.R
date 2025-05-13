@@ -56,6 +56,7 @@ STModelGoelMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data)))
   W <- as.matrix(rep(0, ncol(data)))
   lgama <- as.matrix(rep(0, ncol(Z)))
   leta <- as.matrix(rep(0, ncol(Z)))
+  X<-as.matrix(X)
   # Hiperparametros
   #################################### 3
   c3 <- prior$c3
@@ -86,9 +87,7 @@ STModelGoelMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data)))
 
   Tt <- array(NA, dim = c(1, n))
   NN <- array(NA, dim = c(1, n))
-  iteration <- 410000
-  burnin <- 400000
-  pul <- 1
+
   #########################################
   # Parametros computacionais
   #########################################
