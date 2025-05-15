@@ -219,7 +219,7 @@ STModelGoelMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data)))
     }
   }
 
-  return(list(Mgama, MgamaT, Meta, MetaT, Mv, Mb, MbT, MW, MWT, MPsi, MPsiT))
+  resul<-list(Mgama, MgamaT, Meta, MetaT, Mv, Mb, MbT, MW, MWT, MPsi, MPsiT)
   names(resul) <- c("Mgama", "MgamaT", "Meta", "MetaT", "Mv", "Mb", "MbT", "MW", "MWT", "MPsi", "MPsiT")
-
+return(resul)
 }

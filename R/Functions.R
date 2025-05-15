@@ -1278,5 +1278,9 @@ mfMUSASA<-function(W,alpha,t,delta,f,ttheta){
 
 
 
+#################### funções goel
 
-
+mfGOEL<-function(W,Beta,Alpha,t){
+ res<-exp(W)*(1-exp(-Beta*t^Alpha))
+return(res)
+}
