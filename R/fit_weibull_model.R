@@ -29,7 +29,7 @@ fit_weibull_model <- function(data, results, l) {
 
     gridt <- data[1:(length(data[, l]) - sum(is.na(data[, l]))), l]
 
-    Mean <- mfWEIBULL(Eta, Gama, gridt)
+    Mean <- mfWEIBULL(Gama, Eta, gridt)
 
     MatMean <- rbind(MatMean, t(as.matrix(Mean)))
   }

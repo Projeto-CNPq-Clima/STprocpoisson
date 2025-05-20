@@ -29,7 +29,6 @@ compute_mean_surfaceGOEL <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, 
 
   X<-as.matrix(X)
   Z<-as.matrix(Z)
-
   jj <- nrow(DNO)
   res <- rbind(DNO, as.matrix(sites))
   tt <- nrow(res)
