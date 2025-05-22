@@ -5,47 +5,58 @@
 #' from `STModelGoelMCMC` and applies a Gaussian process-based interpolation.
 #'
 #' @param results A list containing the output from `STModelGoelMCMC`, including:
-#'   - `Mgama`: MCMC chain for the parameter gamma.
-#'   - `Meta`: MCMC chain for the parameter eta.
-#'   - `Mv`: MCMC chain for the parameter sigma^2.
-#'   - `Mb`: MCMC chain for the parameter phi.
-#'   - `MW`: MCMC chain for the parameter W.
-#'   - `MPsi`: MCMC chain for the parameter Psi.
-#'
+#'   - `MW`: Samples for parameter W.
+#'   - `MWT`: Acceptance indicators for parameter W.
+#'   - `MMj`: Samples for parameter M.
+#'   - `MMT`: Acceptance indicators for parameter M.
+#'   - `Mvw`: Samples for parameter sigma^2_w.
+#'   - `Mvm`: Samples for parameter sigma^2_m.
+#'   - `MBeta`: Samples for parameter Beta.
+#'   - `Mbw`: Samples for parameter phi_w.
+#'   - `MbwT`: Acceptance indicators for phi_w.
+#'   - `Mbm`: Samples for parameter phi_m.
+#'   - `MbmT`: Acceptance indicators for phi_m.
+#'   - `MPsi`: Samples for parameter Psi.
 #' @param sites A matrix with geographic coordinates of the monitoring stations.
-#' @param X Covariates for the scale parameter of the Weibull intensity.
-#' @param Z Covariates for the shape parameter of the Weibull intensity.
+#' @param X Covariates for the W parameter of the Goel intensity.
+#' @param Z Covariates for the eta parameter of the Goel intensity.
+#' @param M Covariates for the gama parameter of the Goel intensity.
 #' @param DNO A grid of points where interpolation is to be performed.
-#' @param CovXNO Covariates for the scale parameter at the grid points.
-#' @param CovZNO Covariates for the shape parameter at the grid points.
+#' @param CovXNO Covariates for the W parameter at the grid points.
+#' @param CovZNO Covariates for the eta parameter at the grid points.
+#' @param CovMNO Covariates for the gama parameter at the grid points.
 #' @param tau A vector of temporal points for which the mean surface is computed.
 #'
 #' @return A list: (`Surface`) containing the interpolated mean values at the grid points
 #' for each temporal point in `tau`. The first column contains the mean values at the initial
 #' time step, and subsequent columns contain the differences between consecutive time steps.
+#' @export
 
-
-compute_mean_surfaceGOEL <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
+compute_mean_surfaceGOEL <- function(results, sites, X, Z, M, DNO, CovXNO, CovZNO, CovMNO, tau) {
 
   X<-as.matrix(X)
   Z<-as.matrix(Z)
+  M<-as.matrix(M)
+
   jj <- nrow(DNO)
   res <- rbind(DNO, as.matrix(sites))
   tt <- nrow(res)
 
   Xr <- rbind(CovXNO, X)
-  Zr <- rbind(CovZNO, Z)
+  Zr <- rbind(CovXNO, Z)
+  Mr <- rbind(CovZNO, M)
 
-
-  Mgama<-results$Mgama
-  Meta<-results$Meta
-  Mv <- results$Mv
-  Mb <- results$Mb
   MW <- results$MW
-  MPsi <- results$MPsi
+  Mvw <- results$Mv
+  Mbw <- results$Mb
+  Mgama <- results$Mgama
+  Meta <- results$Meta
+  MPsi<- results$MPsi
+
+  Eta<-exp(CovZNO%*%t(Mgama))
+  Gama<-exp(CovMNO%*%t(Meta))
 
   MWNO <- array(NA, dim = c(nrow(MPsi), jj))
-  MMNO <- array(NA, dim = c(nrow(MPsi), jj))
   MfmNO <- NULL
 
 
@@ -53,10 +64,6 @@ compute_mean_surfaceGOEL <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, 
     WM <- as.matrix(MW[h, ])
     sigma <- gSigma(Mbw[h], Mvw[h], res)
     Psih <- as.matrix(MPsi[h, ])
-
-    MMr <- as.matrix(MMj[h, ])
-    sigmam <- gSigma(Mbm[h], Mvm[h], res)
-    Betah <- as.matrix(MBeta[h, ])
 
     Mpro <- Xr %*% as.matrix(Psih)
 
@@ -72,26 +79,14 @@ compute_mean_surfaceGOEL <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, 
     WNO <- as.matrix(MASS::mvrnorm(1, A2est, SSA2est))
     MWNO[h, ] <- t(WNO)
 
-    Mprom <- Zr %*% as.matrix(Betah)
 
-    A1m <- as.matrix(Mprom[(jj + 1):tt, ])
-    A2m <- as.matrix(Mprom[1:jj, ])
-
-
-    SSA1m <- sigmam[(jj + 1):tt, (jj + 1):tt]
-    SSA2m <- sigmam[1:jj, 1:jj]
-    SSA12m <- sigmam[1:jj, (jj + 1):tt]
-
-    A2estm <- A2m + SSA12m %*% solve(SSA1m) %*% (as.matrix(MMr) - A1m)
-    SSA2estm <- SSA2m - SSA12m %*% solve(SSA1m) %*% t(SSA12m)
-    MNO <- as.matrix(MASS::mvrnorm(1, A2estm, SSA2estm))
-    MMNO[h, ] <- t(MNO)
   }
+
 
   Meanmf <- NULL
   for (i in 1:length(tau)) {
     for (h in 1:nrow(MW)) {
-      MfmNO <- rbind(MfmNO, t(as.matrix(mfWEIBULL(MWNO[h, ], MMNO[h, ], tau[i]))))
+      MfmNO <- rbind(MfmNO, t(as.matrix(mfGOEL(MWNO[h, ], Gama[h],Eta[h], tau[i]))))
     }
 
     Meanmf <- cbind(Meanmf, as.matrix(apply(MfmNO, 2, mean)))
@@ -108,8 +103,9 @@ compute_mean_surfaceGOEL <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, 
     Surface[, kk] <- minterest
   }
 
-  output <- list(Surface,MMNO,MWNO)
-  names(output) <- c("Surface","MMNO","MWNO")
+  output <- list(Surface,MWNO)
+  names(output) <- c("Surface","MWNO")
 
   return(output)
+
 }

@@ -16,9 +16,9 @@ fit_goel_model(data, results, Z, M, l)
 \item \code{Malpha}: Samples for parameter Alpha.
 }}
 
-\item{Z}{aaaaa}
+\item{Z}{A matrix of covariates associated with the parameter beta.}
 
-\item{M}{aaaaa}
+\item{M}{A matrix of covariates associated with the parameter alpha. Default is the same as \code{Z}.}
 
 \item{l}{An integer specifying the index of the monitoring station to analyze.}
 }

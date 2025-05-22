@@ -4,30 +4,51 @@
 \alias{compute_mean_surfaceGOEL}
 \title{Compute Interpolated Mean Surface for Spatiotemporal Model}
 \usage{
-compute_mean_surfaceGOEL(results, sites, X, Z, DNO, CovXNO, CovZNO, tau)
+compute_mean_surfaceGOEL(
+  results,
+  sites,
+  X,
+  Z,
+  M,
+  DNO,
+  CovXNO,
+  CovZNO,
+  CovMNO,
+  tau
+)
 }
 \arguments{
 \item{results}{A list containing the output from \code{STModelGoelMCMC}, including:
 \itemize{
-\item \code{Mgama}: MCMC chain for the parameter gamma.
-\item \code{Meta}: MCMC chain for the parameter eta.
-\item \code{Mv}: MCMC chain for the parameter sigma^2.
-\item \code{Mb}: MCMC chain for the parameter phi.
-\item \code{MW}: MCMC chain for the parameter W.
-\item \code{MPsi}: MCMC chain for the parameter Psi.
+\item \code{MW}: Samples for parameter W.
+\item \code{MWT}: Acceptance indicators for parameter W.
+\item \code{MMj}: Samples for parameter M.
+\item \code{MMT}: Acceptance indicators for parameter M.
+\item \code{Mvw}: Samples for parameter sigma^2_w.
+\item \code{Mvm}: Samples for parameter sigma^2_m.
+\item \code{MBeta}: Samples for parameter Beta.
+\item \code{Mbw}: Samples for parameter phi_w.
+\item \code{MbwT}: Acceptance indicators for phi_w.
+\item \code{Mbm}: Samples for parameter phi_m.
+\item \code{MbmT}: Acceptance indicators for phi_m.
+\item \code{MPsi}: Samples for parameter Psi.
 }}
 
 \item{sites}{A matrix with geographic coordinates of the monitoring stations.}
 
-\item{X}{Covariates for the scale parameter of the Weibull intensity.}
+\item{X}{Covariates for the W parameter of the Goel intensity.}
 
-\item{Z}{Covariates for the shape parameter of the Weibull intensity.}
+\item{Z}{Covariates for the eta parameter of the Goel intensity.}
+
+\item{M}{Covariates for the gama parameter of the Goel intensity.}
 
 \item{DNO}{A grid of points where interpolation is to be performed.}
 
-\item{CovXNO}{Covariates for the scale parameter at the grid points.}
+\item{CovXNO}{Covariates for the W parameter at the grid points.}
 
-\item{CovZNO}{Covariates for the shape parameter at the grid points.}
+\item{CovZNO}{Covariates for the eta parameter at the grid points.}
+
+\item{CovMNO}{Covariates for the gama parameter at the grid points.}
 
 \item{tau}{A vector of temporal points for which the mean surface is computed.}
 }

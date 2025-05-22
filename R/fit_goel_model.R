@@ -8,8 +8,8 @@
 #'   - `MW`: Samples for parameter W.
 #'   - `Mbeta`: Samples for parameter Beta.
 #'   - `Malpha`: Samples for parameter Alpha.
-#' @param Z aaaaa
-#' @param M aaaaa
+#' @param Z A matrix of covariates associated with the parameter beta.
+#' @param M A matrix of covariates associated with the parameter alpha. Default is the same as `Z`.
 #' @param l An integer specifying the index of the monitoring station to analyze.
 #'
 #' @return A list containing:
