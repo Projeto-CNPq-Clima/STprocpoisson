@@ -4,10 +4,13 @@
 #' generates a plot of the observed and estimated cumulative mean functions, and returns relevant metrics.
 #'
 #' @param data A matrix of occurrence times for the event of interest. Each column corresponds to a monitoring station.
-#' @param results A list containing the output from `STModelGoelMCMC`, which includes:
+#' @param resultsSA A list containing the output from `STModelGoelMCMCSA`, which includes:
 #'   - `MW`: Samples for parameter W.
 #'   - `Mbeta`: Samples for parameter Beta.
 #'   - `Malpha`: Samples for parameter Alpha.
+#'   - `Mdelta`: Samples of parameter delta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mtheta`: Samples of parameter theta obtained during the MCMC procedure (iteration - burnin).
+#'   - `Mf`: Samples of parameter f obtained during the MCMC procedure (iteration - burnin).
 #' @param Z A matrix of covariates associated with the parameter beta.
 #' @param M A matrix of covariates associated with the parameter alpha. Default is the same as `Z`.
 #' @param l An integer specifying the index of the monitoring station to analyze.
@@ -21,24 +24,26 @@
 #'
 #' @export
 
-fit_goel_model <- function(data, results,Z,M, l) {
+fit_goel_modelSA <- function(data, resultsSA,Z,M, l) {
 
-  Mgama<-as.matrix(results$Mgama)
-  Meta<-as.matrix(results$Meta)
+  Mgama<-as.matrix(resultsSA$Mgama)
+  Meta<-as.matrix(resultsSA$Meta)
   M<-as.matrix(M)
   Z<-as.matrix(Z)
-  W <- as.matrix(results$MW)
+  W <- as.matrix(resultsSA$MW)
   Beta=exp(Z%*%t(Mgama))
   Alpha=exp(M%*%t(Meta))
 
   Mean <- NULL
   MatMean <- NULL
-  for (i in 1:length(results$MW[, l])) {
+  for (i in 1:length(resultsSA$MW[, l])) {
 
-
+    Delta <- resultsSA$Mdelta[i]
+    Ff <- resultsSA$Mf[i]
+    Theta <- resultsSA$Mtheta[i]
     gridt <- data[1:(length(data[, l]) - sum(is.na(data[, l]))), l]
 
-    Mean<-mfGOEL(W[i,l],Beta[l,i],Alpha[l,i],gridt)
+    Mean<-mfGOELSA(W[i,l],Beta[l,i],Alpha[l,i],gridt,Delta, Ff,Theta)
 
     MatMean <- rbind(MatMean, t(as.matrix(Mean)))
   }

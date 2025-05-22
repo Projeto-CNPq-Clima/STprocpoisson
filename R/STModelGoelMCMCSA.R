@@ -1,18 +1,36 @@
-#' Title
+#' STModelGoelMCMC: A Bayesian Space-Time Model Using MCMC
 #'
-#' @param data aaa
-#' @param sites aaa
-#' @param X aaa
-#' @param Z aaa
-#' @param Fj aaa
-#' @param prior aaa
-#' @param iteration aaa
-#' @param burnin aaa
+#' This function implements a Bayesian space-time model using MCMC for failure time data across geographical locations.
+#' It estimates parameters associated with different components of the model, including covariates, spatial dependencies, and prior distributions.
 #'
-#' @return aaaa
+#' @param data A matrix of failure times, where each column represents a station.
+#' @param sites A matrix of geographic coordinates for the stations (e.g., longitude and latitude).
+#' @param X A matrix of covariates associated with the parameter W. Default is a column of ones and the coordinates from `sites`.
+#' @param Z A matrix of covariates associated with the parameter beta. Default is the same as `X`.
+#' @param Fj A matrix of covariates associated with the parameter alpha. Default is the same as `Z`.
+#' @param prior A list specifying the hyperparameters for the prior distributions:
+#'   - `c3`, `d3`: Shape and rate parameters for the prior of phi_w.
+#'   - `BB1`, `AA1`: Mean vector and covariance matrix for the prior of gamma.
+#'   - `BB2`, `AA2`: Mean vector and covariance matrix for the prior of eta. Defaults are equal to `BB1` and `AA1`.
+#'   - `aa1`, `bb1`: Shape and scale parameters for the inverse-Gamma prior of sigma^2_w.
+#'   - `V`, `MM1`: Covariance matrix and mean vector for the prior of Psi.
+#' @param iteration The total number of MCMC iterations.
+#' @param burnin The number of burn-in iterations to discard.
+#'
+#' @return A list containing the following components:
+#'   - `Mgama`: MCMC chain for the parameter gamma.
+#'   - `MgamaT`: A vector of zeros and ones indicating acceptance (1) or rejection (0) of gamma proposals in the Metropolis-Hastings algorithm.
+#'   - `Meta`: MCMC chain for the parameter eta.
+#'   - `MetaT`: A vector of zeros and ones indicating acceptance (1) or rejection (0) of eta proposals in the Metropolis-Hastings algorithm.
+#'   - `Mv`: MCMC chain for the parameter sigma^2.
+#'   - `Mb`: MCMC chain for the parameter phi.
+#'   - `MbT`: A vector of zeros and ones indicating acceptance (1) or rejection (0) of phi proposals in the Metropolis-Hastings algorithm.
+#'   - `MW`: MCMC chain for the parameter W.
+#'   - `MWT`: A vector of zeros and ones indicating acceptance (1) or rejection (0) of W proposals in the Metropolis-Hastings algorithm.
+#'   - `MPsi`: MCMC chain for the parameter Psi.
+#'   - `MPsiT`: A vector of zeros and ones indicating acceptance (1) or rejection (0) of Psi proposals in the Metropolis-Hastings algorithm.
+#'
 #' @export
-#'
-#' @examples
 STModelGoelMCMCSA<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))),sites),
                               Z=cbind(as.matrix(rep(1,ncol(data))),sites),
                               Fj=Z,prior=list(Psi=as.matrix(rep(0,ncol(X))),
@@ -45,8 +63,8 @@ v=1
 Psi=prior$Psi
 BB1=prior$BB1
 AA1=prior$AA1
-BB1=prior$BB2
-AA1=prior$AA2
+BB2=prior$BB2
+AA2=prior$AA2
 A=prior$A
 B=prior$B
 lgama=prior$lgama
@@ -162,7 +180,7 @@ for(j in 1:iteration){
     MetaT=c(MetaT,temp[[2]])
     Meta=rbind(Meta,t(leta))
 
-    temp=amostrargamaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU2)
+    temp=amostrargamaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA2,BB2,sites,SU2)
     lgama=temp[[1]]
     MgammaT=c(MgammaT,temp[[2]])
     Mgamma=rbind(Mgamma,t(lgama))

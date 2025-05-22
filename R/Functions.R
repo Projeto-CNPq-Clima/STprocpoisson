@@ -1284,3 +1284,9 @@ mfGOEL<-function(W,Beta,Alpha,t){
  res<-exp(W)*(1-exp(-Beta*t^Alpha))
 return(res)
 }
+
+
+mfGOELSA<-function(W,Beta,Alpha,t,delta,f,ttheta){
+  res<-exp(W)*(1-exp(-Beta*t^Alpha))+delta*cos(2*pi*f*t+ttheta)
+  return(res)
+}

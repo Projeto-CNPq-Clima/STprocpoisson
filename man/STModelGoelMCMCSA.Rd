@@ -2,7 +2,7 @@
 % Please edit documentation in R/STModelGoelMCMCSA.R
 \name{STModelGoelMCMCSA}
 \alias{STModelGoelMCMCSA}
-\title{Title}
+\title{STModelGoelMCMC: A Bayesian Space-Time Model Using MCMC}
 \usage{
 STModelGoelMCMCSA(
   data,
@@ -20,25 +20,46 @@ STModelGoelMCMCSA(
 )
 }
 \arguments{
-\item{data}{aaa}
+\item{data}{A matrix of failure times, where each column represents a station.}
 
-\item{sites}{aaa}
+\item{sites}{A matrix of geographic coordinates for the stations (e.g., longitude and latitude).}
 
-\item{X}{aaa}
+\item{X}{A matrix of covariates associated with the parameter W. Default is a column of ones and the coordinates from \code{sites}.}
 
-\item{Z}{aaa}
+\item{Z}{A matrix of covariates associated with the parameter beta. Default is the same as \code{X}.}
 
-\item{Fj}{aaa}
+\item{Fj}{A matrix of covariates associated with the parameter alpha. Default is the same as \code{Z}.}
 
-\item{prior}{aaa}
+\item{prior}{A list specifying the hyperparameters for the prior distributions:
+\itemize{
+\item \code{c3}, \code{d3}: Shape and rate parameters for the prior of phi_w.
+\item \code{BB1}, \code{AA1}: Mean vector and covariance matrix for the prior of gamma.
+\item \code{BB2}, \code{AA2}: Mean vector and covariance matrix for the prior of eta. Defaults are equal to \code{BB1} and \code{AA1}.
+\item \code{aa1}, \code{bb1}: Shape and scale parameters for the inverse-Gamma prior of sigma^2_w.
+\item \code{V}, \code{MM1}: Covariance matrix and mean vector for the prior of Psi.
+}}
 
-\item{iteration}{aaa}
+\item{iteration}{The total number of MCMC iterations.}
 
-\item{burnin}{aaa}
+\item{burnin}{The number of burn-in iterations to discard.}
 }
 \value{
-aaaa
+A list containing the following components:
+\itemize{
+\item \code{Mgama}: MCMC chain for the parameter gamma.
+\item \code{MgamaT}: A vector of zeros and ones indicating acceptance (1) or rejection (0) of gamma proposals in the Metropolis-Hastings algorithm.
+\item \code{Meta}: MCMC chain for the parameter eta.
+\item \code{MetaT}: A vector of zeros and ones indicating acceptance (1) or rejection (0) of eta proposals in the Metropolis-Hastings algorithm.
+\item \code{Mv}: MCMC chain for the parameter sigma^2.
+\item \code{Mb}: MCMC chain for the parameter phi.
+\item \code{MbT}: A vector of zeros and ones indicating acceptance (1) or rejection (0) of phi proposals in the Metropolis-Hastings algorithm.
+\item \code{MW}: MCMC chain for the parameter W.
+\item \code{MWT}: A vector of zeros and ones indicating acceptance (1) or rejection (0) of W proposals in the Metropolis-Hastings algorithm.
+\item \code{MPsi}: MCMC chain for the parameter Psi.
+\item \code{MPsiT}: A vector of zeros and ones indicating acceptance (1) or rejection (0) of Psi proposals in the Metropolis-Hastings algorithm.
+}
 }
 \description{
-Title
+This function implements a Bayesian space-time model using MCMC for failure time data across geographical locations.
+It estimates parameters associated with different components of the model, including covariates, spatial dependencies, and prior distributions.
 }
