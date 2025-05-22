@@ -218,6 +218,6 @@ for(j in 1:iteration){
 
 }
 resul<-list(MW,MWT,Meta,MetaT,Mgamma,MgammaT,MPsi,Mv,Mb,MbT,Mf,MfT,MdeltaT,Mdelta,MthetaT,Mtheta)
-names(resul)<-c("MW","MWT","Meta","MetaT","Mgamma","MgammaT","MPsi","Mv","Mb","MbT","Mf","MfT","MdeltaT","Mdelta","MthetaT","Mtheta")
+names(resul)<-c("MW","MWT","Meta","MetaT","Mgama","MgamaT","MPsi","Mv","Mb","MbT","Mf","MfT","MdeltaT","Mdelta","MthetaT","Mtheta")
 return(resul)
 }
