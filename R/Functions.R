@@ -713,7 +713,7 @@ mfWEIBULLSA<-function(delta,eta,gama,f,ttheta,t){
 
 
 
-sintonizarNGOELSA=function(bar,taxa,tau,mat,i){
+sintonizarNGOELSAT=function(bar,taxa,tau,mat,i){
 
   mat=as.matrix(mat)
 
@@ -737,7 +737,7 @@ sintonizarNGOELSA=function(bar,taxa,tau,mat,i){
 
 }
 ######################################################
-sintonizarGOELSA=function(bar,taxa,tau,mat,i){
+sintonizarGOELSAT=function(bar,taxa,tau,mat,i){
 
   mat=as.matrix(mat)
 
@@ -762,7 +762,8 @@ sintonizarGOELSA=function(bar,taxa,tau,mat,i){
 }
 
 #############################################################
-GG1=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT){
+#############################################################
+GG1GOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT){
 
   ffalpha=FF%*%eeta
   zzbeta=ZZ%*%ggamma
@@ -786,7 +787,7 @@ GG1=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT){
 
 }
 #############################################################
-GG2=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT){
+GG2GOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT){
 
   ffalpha=FF%*%eeta
   zzbeta=ZZ%*%ggamma
@@ -809,13 +810,13 @@ GG2=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT){
 
 }
 ###########################################
-amostrarthetaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1){
+amostrarthetaGOELSAT=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1){
 
   thetaprop=runif(1,max(0,ttheta-u1),min(ttheta+u1,2*pi))
 
-  logp=GG2(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(ttheta)+log(2*pi-ttheta))
+  logp=GG2GOELSA(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(ttheta)+log(2*pi-ttheta))
 
-  logpprop=GG2(ggamma,eeta,ddelta,ff,thetaprop,WW,ZZ,FF,yT,TT)-0.5*(log(thetaprop)+log(2*pi-thetaprop))
+  logpprop=GG2GOELSA(ggamma,eeta,ddelta,ff,thetaprop,WW,ZZ,FF,yT,TT)-0.5*(log(thetaprop)+log(2*pi-thetaprop))
 
   logprob=logpprop+log( dunif( ttheta, max(0,thetaprop-u1), min(2*pi,thetaprop+u1) ) )-( logp+log( dunif( thetaprop, max(0,ttheta-u1), min(2*pi,ttheta+u1) ) ) )
 
@@ -845,7 +846,7 @@ amostrarthetaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1){
 
 }
 #############################################################
-amostrardeltaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,d){
+amostrardeltaGOELSAT=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,d){
 
 
   deltaprop=runif(1,max(0,ddelta-u1),min(ddelta+u1,d))
@@ -865,9 +866,9 @@ amostrardeltaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,d){
   }
 
 
-  logp=GG2(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(ddelta)+log(d-ddelta))
+  logp=GG2GOELSA(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(ddelta)+log(d-ddelta))
 
-  logpprop=GG2(ggamma,eeta,deltaprop,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(deltaprop)+log(d-deltaprop))
+  logpprop=GG2GOELSA(ggamma,eeta,deltaprop,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(deltaprop)+log(d-deltaprop))
 
   logprob=logpprop+log( dunif( ddelta, max(0,deltaprop-u1), min(d,deltaprop+u1) ) )-( logp+log( dunif( deltaprop, max(0,ddelta-u1), min(d,ddelta+u1) ) ) )
 
@@ -896,14 +897,14 @@ amostrardeltaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,d){
   res
 }
 #############################################################
-amostrarfGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,a,b){
+amostrarfGOELSAT=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,a,b){
 
 
   fprop=runif(1,max(a,ff-u1),min(ff+u1,b))
 
-  logp=GG2(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(ff-a)+log(b-ff))
+  logp=GG2GOELSA(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(ff-a)+log(b-ff))
 
-  logpprop=GG2(ggamma,eeta,ddelta,fprop,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(fprop-a)+log(b-fprop))
+  logpprop=GG2GOELSA(ggamma,eeta,ddelta,fprop,ttheta,WW,ZZ,FF,yT,TT)-0.5*(log(fprop-a)+log(b-fprop))
 
   logprob=logpprop+log( dunif( ff, max(a,fprop-u1), min(b,fprop+u1) ) )-( logp+log( dunif( fprop, max(a,ff-u1), min(b,ff+u1) ) ) )
 
@@ -933,7 +934,7 @@ amostrarfGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,a,b){
 
 }
 ######################################################
-amostrarWGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,bb,vv,loca,u1,XX,PPs){
+amostrarWGOELSAT=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,bb,vv,loca,u1,XX,PPs){
 
   n=nrow(WW)
   WWprop=as.matrix(MASS::mvrnorm(1,WW,u1*diag(1,n)))
@@ -954,8 +955,8 @@ amostrarWGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,bb,vv,loca,
 
   SSig=gSigma(bb,vv,loca)
 
-  postWW=GG1(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(WW-XX%*%PPs)%*%solve(SSig)%*%(WW-XX%*%PPs)
-  postWWprop=GG1(ggamma,eeta,ddelta,ff,ttheta,WWprop,ZZ,FF,yT,TT)-0.5*t(WWprop-XX%*%PPs)%*%solve(SSig)%*%(WWprop-XX%*%PPs)
+  postWW=GG1GOELSA(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(WW-XX%*%PPs)%*%solve(SSig)%*%(WW-XX%*%PPs)
+  postWWprop=GG1GOELSA(ggamma,eeta,ddelta,ff,ttheta,WWprop,ZZ,FF,yT,TT)-0.5*t(WWprop-XX%*%PPs)%*%solve(SSig)%*%(WWprop-XX%*%PPs)
 
   prob=min(exp((postWWprop)-(postWW)),1)
 
@@ -985,7 +986,7 @@ amostrarWGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,bb,vv,loca,
 
 }
 ##############################################
-amostrargamaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca,u1){
+amostrargamaGOELSAT=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca,u1){
 
 
   ggamaprop=as.matrix(MASS::mvrnorm(1,ggamma,u1*solve(t(ZZ)%*%ZZ)))
@@ -1007,8 +1008,8 @@ amostrargamaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca
   }
 
 
-  pgama=GG1(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(ggamma-A)%*%solve(B)%*%(ggamma-A)
-  pgamaprop=GG1(ggamaprop,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(ggamaprop-A)%*%solve(B)%*%(ggamaprop-A)
+  pgama=GG1GOELSA(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(ggamma-A)%*%solve(B)%*%(ggamma-A)
+  pgamaprop=GG1GOELSA(ggamaprop,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(ggamaprop-A)%*%solve(B)%*%(ggamaprop-A)
 
 
   logprob=pgamaprop-pgama
@@ -1033,7 +1034,7 @@ amostrargamaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca
 
 }
 #########################
-amostraretaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca,u1){
+amostraretaGOELSAT=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca,u1){
 
 
   etaprop=as.matrix(MASS::mvrnorm(1,eeta,u1*solve(t(FF)%*%FF)))
@@ -1053,8 +1054,8 @@ amostraretaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca,
   }
 
 
-  pgama=GG1(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(eeta-A)%*%solve(B)%*%(eeta-A)
-  pgamaprop=GG1(ggamma,etaprop,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(etaprop-A)%*%solve(B)%*%(etaprop-A)
+  pgama=GG1GOELSA(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(eeta-A)%*%solve(B)%*%(eeta-A)
+  pgamaprop=GG1GOELSA(ggamma,etaprop,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT)-0.5*t(etaprop-A)%*%solve(B)%*%(etaprop-A)
 
 
   logprob=pgamaprop-pgama
@@ -1079,7 +1080,7 @@ amostraretaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca,
 
 }
 ############################
-amostrarbGOELSA=function(WW,vv,bb,loca,ab,ba,XX,PPsi,u1){
+amostrarbGOELSAT=function(WW,vv,bb,loca,ab,ba,XX,PPsi,u1){
 
   bprop=rgamma(1,shape=bb*u1, rate = u1)
 

@@ -113,19 +113,19 @@ STModelGoelMCMCSATEST<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))
   for(j in 1:iteration){
 
     if(j<=burnin){
-      temp=amostrarWGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),b,v,sites,SU1,X,Psi)
+      temp=amostrarWGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),b,v,sites,SU1,X,Psi)
       W=temp[[1]]
       MWT=c(MWT,temp[[2]])
 
-      temp=amostrardeltaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.01,100)
+      temp=amostrardeltaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.01,100)
       delta=temp[[1]]
       MdeltaT=c(MdeltaT,temp[[2]])
 
-      temp=amostraretaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU2)
+      temp=amostraretaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU2)
       leta=temp[[1]]
       MetaT=c(MetaT,temp[[2]])
 
-      temp=amostrargamaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU3)
+      temp=amostrargamaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU3)
       lgama=temp[[1]]
       MgammaT=c(MgammaT,temp[[2]])
 
@@ -139,23 +139,23 @@ STModelGoelMCMCSATEST<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))
 
       v=1/rgamma(1,shape=aa, rate = bb)
 
-      temp=amostrarbGOELSA(W,v,b,sites,c3,d3,X,Psi,SU4)
+      temp=amostrarbGOELSAT(W,v,b,sites,c3,d3,X,Psi,SU4)
       b=temp[[1]]
       MbT=c(MbT,temp[[2]])
 
-      temp=amostrarfGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.00001/2,1/(365+10),1/(365-10))
+      temp=amostrarfGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.00001/2,1/(365+10),1/(365-10))
       f=temp[[1]]
       MfT=c(MfT,temp[[2]])
 
-      temp=amostrarthetaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.05)
+      temp=amostrarthetaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.05)
       theta=temp[[1]]
       MthetaT=c(MthetaT,temp[[2]])
 
       if((j%%50)==0){
-        SU1=sintonizarNGOELSA(burnin,0.20,SU1,MWT,j)
-        SU2=sintonizarNGOELSA(burnin,0.20,SU2,MetaT,j)
-        SU3=sintonizarNGOELSA(burnin,0.20,SU3,MgammaT,j)
-        SU4=sintonizarGOELSA(burnin,0.44,SU4,MbT,j)
+        SU1=sintonizarNGOELSAT(burnin,0.20,SU1,MWT,j)
+        SU2=sintonizarNGOELSAT(burnin,0.20,SU2,MetaT,j)
+        SU3=sintonizarNGOELSAT(burnin,0.20,SU3,MgammaT,j)
+        SU4=sintonizarGOELSAT(burnin,0.44,SU4,MbT,j)
 
       }else{
 
@@ -163,22 +163,22 @@ STModelGoelMCMCSATEST<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))
       print(j)
     }else{
 
-      temp=amostrarWGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),b,v,sites,SU1,X,Psi)
+      temp=amostrarWGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),b,v,sites,SU1,X,Psi)
       W=temp[[1]]
       MWT=c(MWT,temp[[2]])
       MW=rbind(MW,t(W))
 
-      temp=amostrardeltaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.01,100)
+      temp=amostrardeltaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.01,100)
       delta=temp[[1]]
       MdeltaT=c(MdeltaT,temp[[2]])
       Mdelta=c(Mdelta,delta)
 
-      temp=amostraretaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU2)
+      temp=amostraretaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU2)
       leta=temp[[1]]
       MetaT=c(MetaT,temp[[2]])
       Meta=rbind(Meta,t(leta))
 
-      temp=amostrargamaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU2)
+      temp=amostrargamaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),AA1,BB1,sites,SU2)
       lgama=temp[[1]]
       MgammaT=c(MgammaT,temp[[2]])
       Mgamma=rbind(Mgamma,t(lgama))
@@ -195,17 +195,17 @@ STModelGoelMCMCSATEST<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))
       v=1/rgamma(1,shape=aa, rate = bb)
       Mv=c(Mv,v)
 
-      temp=amostrarbGOELSA(W,v,b,sites,c3,d3,X,Psi,SU4)
+      temp=amostrarbGOELSAT(W,v,b,sites,c3,d3,X,Psi,SU4)
       b=temp[[1]]
       MbT=c(MbT,temp[[2]])
       Mb=c(Mb,b)
 
-      temp=amostrarfGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.00001/2,1/(365+10),1/(365-10))
+      temp=amostrarfGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.00001/2,1/(365+10),1/(365-10))
       f=temp[[1]]
       MfT=c(MfT,temp[[2]])
       Mf=c(Mf,f)
 
-      temp=amostrarthetaGOELSA(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.05)
+      temp=amostrarthetaGOELSAT(lgama,leta,delta,f,theta,W,Z,Fj,data,t(Tt),0.05)
       theta=temp[[1]]
       MthetaT=c(MthetaT,temp[[2]])
       Mtheta=c(Mtheta,theta)
