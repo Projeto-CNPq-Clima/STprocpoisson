@@ -33,8 +33,7 @@
 #' @export
 STModelGoelMCMCSA<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))),sites),
                               Z=cbind(as.matrix(rep(1,ncol(data))),sites),
-                              Fj=Z,prior=list(Psi=as.matrix(rep(0,ncol(X))),
-                                              BB1=diag(100,ncol(Z)),
+                              Fj=Z,prior=list(BB1=diag(100,ncol(Z)),
                                               AA1=as.matrix(rep(0,ncol(Z))),
                                               BB2=diag(100,ncol(Z)),
                                               AA2=as.matrix(rep(0,ncol(Z))),
@@ -52,15 +51,16 @@ X<-as.matrix(X)
 Z<-as.matrix(Z)
 Fj<-as.matrix(Fj)
 #Valores iniciais
+
 theta=3.525654
 delta=0.01
 f=1/ 366.8474
 W=as.matrix(rep(9,ncol(data)))
 b=1
 v=1
+Psi=as.matrix(rep(0,ncol(X)))
 
 
-Psi=prior$Psi
 BB1=prior$BB1
 AA1=prior$AA1
 BB2=prior$BB2

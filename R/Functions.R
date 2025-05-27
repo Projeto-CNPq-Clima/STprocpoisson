@@ -712,6 +712,56 @@ mfWEIBULLSA<-function(delta,eta,gama,f,ttheta,t){
 ######################## GOELSA
 
 
+
+sintonizarNGOELSA=function(bar,taxa,tau,mat,i){
+
+  mat=as.matrix(mat)
+
+
+
+  mater=(1/50)*sum(mat[(i-49):i,1])
+
+  if(mater>=taxa){
+    delta=min(0.01,(i/50+1)^(-0.5))
+    temp4=log(tau)+delta
+    temp5=exp(temp4)
+    return(temp5)
+  }else{
+    delta=min(0.01,(i/50+1)^(-0.5))
+    temp4=log(tau)-delta
+    temp5=exp(temp4)
+    return(temp5)
+  }
+
+
+
+}
+######################################################
+sintonizarGOELSA=function(bar,taxa,tau,mat,i){
+
+  mat=as.matrix(mat)
+
+
+
+  mater=(1/50)*sum(mat[(i-49):i,1])
+
+  if(mater>=taxa){
+    delta=min(0.01,(i/50+1)^(-0.5))
+    temp4=log(tau)-delta
+    temp5=exp(temp4)
+    return(temp5)
+  }else{
+    delta=min(0.01,(i/50+1)^(-0.5))
+    temp4=log(tau)+delta
+    temp5=exp(temp4)
+    return(temp5)
+  }
+
+
+
+}
+
+#############################################################
 GG1=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT){
 
   ffalpha=FF%*%eeta
@@ -847,6 +897,7 @@ amostrardeltaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,d){
 }
 #############################################################
 amostrarfGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,u1,a,b){
+
 
   fprop=runif(1,max(a,ff-u1),min(ff+u1,b))
 
@@ -1026,6 +1077,50 @@ amostraretaGOELSA=function(ggamma,eeta,ddelta,ff,ttheta,WW,ZZ,FF,yT,TT,A,B,loca,
   res=list(res,rejei)
   res
 
+}
+############################
+amostrarbGOELSA=function(WW,vv,bb,loca,ab,ba,XX,PPsi,u1){
+
+  bprop=rgamma(1,shape=bb*u1, rate = u1)
+
+  SSigprop=gSigma(bprop,vv,loca)
+
+  if((det(SSigprop)==0)|(bprop< 0.005)){
+    return(list(bb,0))
+  }
+
+  SSig=gSigma(bb,vv,loca)
+  SSigprop=gSigma(bprop,vv,loca)
+
+
+  logp=-0.5*t(WW-XX%*%PPsi)%*%solve(SSig)%*%(WW-XX%*%PPsi)-0.5*log(det(SSig))+(ab-1)*log(bb)-ba*bb
+
+  logpprop=-0.5*t(WW-XX%*%PPsi)%*%solve(SSigprop)%*%(WW-XX%*%PPsi)-0.5*log(det(SSigprop))+(ab-1)*log(bprop)-ba*bprop
+
+  logprob=logpprop+log(dgamma(bb,shape=bprop*u1,rate=u1))-(logp+log(dgamma(bprop,shape=bb*u1,rate=u1)))
+  prob<-min(c(1,exp(logprob)))
+
+  u=runif(1,0,1)
+
+  if(u<prob){
+
+    bprox=bprop
+
+    rejei=1
+
+
+  }else{
+
+    bprox=bb
+
+    rejei=0;
+
+  }
+
+
+
+  res=list(bprox,rejei)
+  res
 }
 
 

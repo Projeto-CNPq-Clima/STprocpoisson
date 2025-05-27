@@ -2,6 +2,7 @@
 
 export(STModelGoelMCMC)
 export(STModelGoelMCMCSA)
+export(STModelGoelMCMCSATEST)
 export(STModelMusaOkumotoMCMC)
 export(STModelMusaOkumotoMCMCSA)
 export(STModelWeibullMCMC)
