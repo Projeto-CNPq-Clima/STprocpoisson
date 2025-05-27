@@ -39,8 +39,9 @@ STModelGoelMCMCSATEST<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))
                                              AA2=as.matrix(rep(0,ncol(Z))),
                                              A=as.matrix(rep(0,ncol(Z))),
                                              B=diag(100,ncol(Z)),
-                                             lgama=as.matrix(c(-3.17022118,0.06602419,1.33314203)),
-                                             leta=as.matrix(c(1.384896960,0.032667601,0.004153729)),
+
+                                             lgama=as.matrix(rep(-1000,ncol(Z))),
+                                             leta=as.matrix(rep(-1000,ncol(Z))),
 
                                              aa1=2.01,
                                              bb1=1.005,
