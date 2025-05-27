@@ -10,10 +10,11 @@ STModelGoelMCMCSATEST(
   X = cbind(as.matrix(rep(1, ncol(data))), sites),
   Z = cbind(as.matrix(rep(1, ncol(data))), sites),
   Fj = Z,
+  lgama = as.matrix(rep(-3, ncol(Z))),
+  leta = as.matrix(rep(1, ncol(Z))),
   prior = list(BB1 = diag(100, ncol(Z)), AA1 = as.matrix(rep(0, ncol(Z))), BB2 =
     diag(100, ncol(Z)), AA2 = as.matrix(rep(0, ncol(Z))), A = as.matrix(rep(0, ncol(Z))),
-    B = diag(100, ncol(Z)), lgama = as.matrix(rep(1e-07, ncol(Z))), leta =
-    as.matrix(rep(0, ncol(Z))), aa1 = 2.01, bb1 = 1.005, c3 = (-2 *
+    B = diag(100, ncol(Z)), aa1 = 2.01, bb1 = 1.005, c3 = (-2 *
     log(0.05)/max(dist(sites))) * 0.1, d3 = 0.1),
   iteration,
   burnin
@@ -29,6 +30,10 @@ STModelGoelMCMCSATEST(
 \item{Z}{A matrix of covariates associated with the parameter beta. Default is the same as \code{X}.}
 
 \item{Fj}{A matrix of covariates associated with the parameter alpha. Default is the same as \code{Z}.}
+
+\item{lgama}{aaaa}
+
+\item{leta}{aaaa}
 
 \item{prior}{A list specifying the hyperparameters for the prior distributions:
 \itemize{

@@ -8,6 +8,8 @@
 #' @param X A matrix of covariates associated with the parameter W. Default is a column of ones and the coordinates from `sites`.
 #' @param Z A matrix of covariates associated with the parameter beta. Default is the same as `X`.
 #' @param Fj A matrix of covariates associated with the parameter alpha. Default is the same as `Z`.
+#' @param lgama aaaa
+#' @param leta aaaa
 #' @param prior A list specifying the hyperparameters for the prior distributions:
 #'   - `c3`, `d3`: Shape and rate parameters for the prior of phi_w.
 #'   - `BB1`, `AA1`: Mean vector and covariance matrix for the prior of gamma.
@@ -33,16 +35,14 @@
 #' @export
 STModelGoelMCMCSATEST<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))),sites),
                              Z=cbind(as.matrix(rep(1,ncol(data))),sites),
-                             Fj=Z,prior=list(BB1=diag(100,ncol(Z)),
+                             Fj=Z, lgama=as.matrix(rep(-3,ncol(Z))),
+                             leta=as.matrix(rep(1,ncol(Z))),
+                             prior=list(BB1=diag(100,ncol(Z)),
                                              AA1=as.matrix(rep(0,ncol(Z))),
                                              BB2=diag(100,ncol(Z)),
                                              AA2=as.matrix(rep(0,ncol(Z))),
                                              A=as.matrix(rep(0,ncol(Z))),
                                              B=diag(100,ncol(Z)),
-
-                                             lgama=as.matrix(rep(0.0000001,ncol(Z))),
-                                             leta=as.matrix(rep(00,ncol(Z))),
-
                                              aa1=2.01,
                                              bb1=1.005,
                                              c3=(-2*log(0.05)/max(dist(sites)))*0.1,
@@ -70,8 +70,8 @@ STModelGoelMCMCSATEST<- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))
   AA2=prior$AA2
   A=prior$A
   B=prior$B
-  lgama=prior$lgama
-  leta=prior$leta
+  #lgama=prior$lgama
+  #leta=prior$leta
 
   aa1=prior$aa1
   bb1=prior$bb1
