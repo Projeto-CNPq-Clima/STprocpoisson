@@ -1,5 +1,5 @@
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1234567.svg)](https://doi.org/10.5281/zenodo.15651336)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15651336.svg)](https://doi.org/10.5281/zenodo.15651336)
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # STprocpoisson
