@@ -706,7 +706,13 @@ mfWEIBULLSA<-function(delta,eta,gama,f,ttheta,t){
   res
 
 }
+################################################
 
+mfSURFACEWEIBULL=function(Wl,Ml,tau,deltaM,ffM,thetaM){
+
+  res=exp(Wl)*tau^(exp(Ml))+deltaM*cos(2*pi*(ffM)*tau+thetaM)
+  res
+}
 
 
 ######################## GOELSA
@@ -1385,4 +1391,37 @@ return(res)
 mfGOELSA<-function(W,Beta,Alpha,t,delta,f,ttheta){
   res<-exp(W)*(1-exp(-Beta*t^Alpha))+delta*cos(2*pi*f*t+ttheta)
   return(res)
+}
+
+
+
+######################### valores iniciais theta e delta
+
+njfunction=function(data,a,b){
+
+  nnj=NULL
+
+  for(i in 1:ncol(data)){
+
+    res=sum(ifelse((data[,i]>a)&(data[,i]<=b),1,0),na.rm=T)
+    nnj=c(nnj,res)
+  }
+
+  Mdata=array(NA,dim=c(max(nnj),ncol(data)))
+
+  for(i in 1:ncol(data)){
+    Mdata[,i]=c(data[which((data[,i]>a)&(data[,i]<=b)),i],rep(NA,(max(nnj)-length(which((data[,i]>a)&(data[,i]<=b))))))
+  }
+
+  res=list(Mdata,nnj)
+  res
+
+}
+
+##########################
+logverouni = function(xx,Tao,nnt,datos){
+  theta=xx[1]
+  alpha=xx[2]
+  res=-(-theta*Tao^alpha+nnt*log(theta)+nnt*log(alpha)+alpha*sum(log(datos),na.rm = T))
+  res
 }

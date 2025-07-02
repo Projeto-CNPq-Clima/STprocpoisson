@@ -80,11 +80,28 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
   vw=1
   bm=1
   vm=1
-  theta=pi/2
-  delta=0.001
+  #theta=pi/2
+  #delta=0.001
   f=1/365
   M=as.matrix(rep(log(0.89),ncol(Data)))
   W=as.matrix(rep(0,ncol(Data)))
+
+
+
+  temp1= njfunction(data,0,max(data,na.rm = T))
+  nnjj=temp1[[2]]
+  Wmtemp=NULL
+  Mmtemp=NULL
+
+  for(i in 1:ncol(data)){
+    mmmtemp=optim(c(1,1),logverouni,c(1,1),max(data,na.rm = T),nnjj[i],data[,i])
+    Wmtemp=c(Wmtemp,log(mmmtemp$par[1]))
+    Mmtemp=c(Mmtemp,log(mmmtemp$par[2]))
+
+  }
+  theta <-coef(lm(Wmtemp~X))
+  delta<- coef(lm(Mmtemp~X))
+
 
   #Hiperparametros
   aa1 <- prior$aa1
@@ -227,7 +244,7 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
       MW=rbind(MW,t(W))
       MWT=c(MWT,temp[[2]])
 
-      temp=amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,Data,SU2,f)
+      temp=amostrarMsa(delta,theta,W,M,sites,Z,Beta,bm,vm,nj,Tt,Data,SU2,f)
       M=as.matrix(temp[[1]])
       MMj=rbind(MMj,t(M))
       MMT=c(MMT,temp[[2]])

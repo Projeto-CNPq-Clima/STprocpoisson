@@ -25,8 +25,6 @@
 #'   - `MfT` : A binary vector indicating whether each proposed value of delta was accepted (1) or rejected (0). Used to compute the acceptance rate for f.
 #'
 #' @param sites A matrix with geographic coordinates of the monitoring stations.
-#' @param X Covariates for the scale parameter of the Weibull intensity.
-#' @param Z Covariates for the shape parameter of the Weibull intensity.
 #' @param DNO A grid of points where interpolation is to be performed.
 #' @param CovXNO Covariates for the scale parameter at the grid points.
 #' @param CovZNO Covariates for the shape parameter at the grid points.
@@ -37,92 +35,104 @@
 #' time step, and subsequent columns contain the differences between consecutive time steps.
 #' @export
 
-compute_mean_surfaceSA <- function(resultsSA, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
+compute_mean_surfaceWEIBULLSA <- function(resultsSA, sites, DNO, CovXNO, CovZNO,tau) {
 
-  X<-as.matrix(X)
-  Z<-as.matrix(Z)
 
-  jj <- nrow(DNO)
-  res <- rbind(DNO, as.matrix(sites))
-  tt <- nrow(res)
+  jj=nrow(DNO)
+  res=rbind(DNO,as.matrix(sites))
+  tt=nrow(res)
 
-  Xr <- rbind(CovXNO, X)
-  Zr <- rbind(CovZNO, Z)
+  Uns=as.matrix(rep(1,tt))
+  Xr=as.matrix(cbind(Uns,res))
+  Zr=Xr
 
-  MW <- resultsSA$MW
-  MMj <- resultsSA$MMj
-  Mvw <- resultsSA$Mvw
-  Mvm <- resultsSA$Mvm
-  Mbw <- resultsSA$Mbw
-  Mbm <- resultsSA$Mbm
-  MBeta <- resultsSA$MBeta
-  MPsi <- resultsSA$MPsi
+  MPsi<-resultsSA$MPsi
+
+  MWNO=array(NA,dim=c(nrow(MPsi),jj))
+  MMNO=array(NA,dim=c(nrow(MPsi),jj))
+  MfmNO=NULL
+
+  MW<-resultsSA$MW
+  Mbw<-resultsSA$Mbw
+  Mbv<-resultsSA$Mbv
+  MMj<-resultsSA$MMj
+  MBeta<-resultsSA$MBeta
+  Mvw<-resultsSA$Mvw
+  Mbm<-resultsSA$Mbm
+  Mvm<-resultsSA$Mvm
+
+  for(h in 1:nrow(MW)){
+
+    WM=as.matrix(MW[h,])
+    sigma=gSigma(Mbw[h],Mvw[h],res)
+    Psih=as.matrix(MPsi[h,])
+
+    MMr=as.matrix(MMj[h,])
+    sigmam=gSigma(Mbm[h],Mvm[h],res)
+    Betah=as.matrix(MBeta[h,])
+
+    Mpro=Xr%*%as.matrix(Psih)
+
+    A1=as.matrix(Mpro[(jj+1):tt,])
+    A2=as.matrix(Mpro[1:jj,])
+
+    SSA1=sigma[(jj+1):tt,(jj+1):tt]
+    SSA2=sigma[1:jj,1:jj]
+    SSA12=sigma[1:jj,(jj+1):tt]
+
+    A2est=A2+SSA12%*%solve(SSA1)%*%(as.matrix(WM)-A1)
+    SSA2est=SSA2-SSA12%*%solve(SSA1)%*%t(SSA12)
+    WNO=as.matrix(MASS::mvrnorm(1,A2est,SSA2est))
+    MWNO[h,]=t(WNO)
+
+    Mprom=Zr%*%as.matrix(Betah)
+
+    A1m=as.matrix(Mprom[(jj+1):tt,])
+    A2m=as.matrix(Mprom[1:jj,])
+
+
+    SSA1m=sigmam[(jj+1):tt,(jj+1):tt]
+    SSA2m=sigmam[1:jj,1:jj]
+    SSA12m=sigmam[1:jj,(jj+1):tt]
+
+    A2estm=A2m+SSA12m%*%solve(SSA1m)%*%(as.matrix(MMr)-A1m)
+    SSA2estm=SSA2m-SSA12m%*%solve(SSA1m)%*%t(SSA12m)
+    MNO=as.matrix(MASS::mvrnorm(1,A2estm,SSA2estm))
+    MMNO[h,]=t(MNO)
+
+
+
+  }
+
+  #######################################
+  Meanmf=NULL
   Mdelta<-resultsSA$Mdelta
   Mtheta<-resultsSA$Mtheta
   Mf<-resultsSA$Mf
+  for(i in 1:length(tau)){
 
-  MWNO <- array(NA, dim = c(nrow(MPsi), jj))
-  MMNO <- array(NA, dim = c(nrow(MPsi), jj))
-  MfmNO <- NULL
+    for(h in 1:nrow(MW)){
 
+      MfmNO=rbind(MfmNO,t(as.matrix(mfSURFACEWEIBULL(MWNO[h,],MMNO[h,],tau[i],Mdelta[h],Mf[h],Mtheta[h]))))
 
-  for (h in 1:nrow(MW)) {
-    WM <- as.matrix(MW[h, ])
-    sigma <- gSigma(Mbw[h], Mvw[h], res)
-    Psih <- as.matrix(MPsi[h, ])
-
-    MMr <- as.matrix(MMj[h, ])
-    sigmam <- gSigma(Mbm[h], Mvm[h], res)
-    Betah <- as.matrix(MBeta[h, ])
-
-    Mpro <- Xr %*% as.matrix(Psih)
-
-    A1 <- as.matrix(Mpro[(jj + 1):tt, ])
-    A2 <- as.matrix(Mpro[1:jj, ])
-
-    SSA1 <- sigma[(jj + 1):tt, (jj + 1):tt]
-    SSA2 <- sigma[1:jj, 1:jj]
-    SSA12 <- sigma[1:jj, (jj + 1):tt]
-
-    A2est <- A2 + SSA12 %*% solve(SSA1) %*% (as.matrix(WM) - A1)
-    SSA2est <- SSA2 - SSA12 %*% solve(SSA1) %*% t(SSA12)
-    WNO <- as.matrix(MASS::mvrnorm(1, A2est, SSA2est))
-    MWNO[h, ] <- t(WNO)
-
-    Mprom <- Zr %*% as.matrix(Betah)
-
-    A1m <- as.matrix(Mprom[(jj + 1):tt, ])
-    A2m <- as.matrix(Mprom[1:jj, ])
-
-
-    SSA1m <- sigmam[(jj + 1):tt, (jj + 1):tt]
-    SSA2m <- sigmam[1:jj, 1:jj]
-    SSA12m <- sigmam[1:jj, (jj + 1):tt]
-
-    A2estm <- A2m + SSA12m %*% solve(SSA1m) %*% (as.matrix(MMr) - A1m)
-    SSA2estm <- SSA2m - SSA12m %*% solve(SSA1m) %*% t(SSA12m)
-    MNO <- as.matrix(MASS::mvrnorm(1, A2estm, SSA2estm))
-    MMNO[h, ] <- t(MNO)
-  }
-
-  Meanmf <- NULL
-  for (i in 1:length(tau)) {
-    for (h in 1:nrow(MW)) {
-      MfmNO <- rbind(MfmNO, t(as.matrix(mfWEIBULLSA(Mdelta[h],exp(MMNO[h,]),exp(MWNO[h,]),Mf[h],Mtheta[h],tau[i]))))
     }
 
-    Meanmf <- cbind(Meanmf, as.matrix(apply(MfmNO, 2, mean)))
-    MfmNO <- NULL
+    Meanmf=cbind(Meanmf,as.matrix(apply(MfmNO,2,mean)))
+    MfmNO=NULL
   }
+  ##################################
+  ## Interpolação da função m(t,s)
+  ###################################3
+  Surface=array(NA,dim=c(nrow(DNO),10))
+  Surface[,1]=Meanmf[,1]
 
 
-  Surface <- array(NA, dim = c(nrow(DNO), length(tau)))
-  Surface[, 1] <- Meanmf[, 1]
+  for(kk in 2:10){
+    minterest=Meanmf[,kk]-Meanmf[,(kk-1)]
+    Surface[,kk]=minterest
 
 
-  for (kk in 2:length(tau)) {
-    minterest <- Meanmf[, kk] - Meanmf[, (kk - 1)]
-    Surface[, kk] <- minterest
+
   }
 
   output <- list(Surface,MMNO,MWNO)
@@ -130,3 +140,6 @@ compute_mean_surfaceSA <- function(resultsSA, sites, X, Z, DNO, CovXNO, CovZNO, 
 
   return(output)
 }
+
+
+
