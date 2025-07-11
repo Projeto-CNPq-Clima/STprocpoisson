@@ -61,7 +61,8 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
                                  A1 = as.matrix(rep(0, ncol(X))),
                                  B1 = diag(100, ncol(X)),
                                  A = as.matrix(rep(0, ncol(Z))),
-                                 B = diag(100, ncol(Z))), iteration, burnin) {
+                                 B = diag(100, ncol(Z))
+                               ), iteration, burnin) {
   # Valores iniciais
   bw <- 1
   vw <- 1
@@ -171,11 +172,6 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
       } else {
 
       }
-
-
-
-
-
     } else {
       temp <- amostrarW(W, M, sites, X, Psi, bw, vw, nj, Tt, SU1)
       W <- as.matrix(temp[[1]])
@@ -223,8 +219,8 @@ STModelWeibullMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data
 
 
 
-      resul <- list(MMj, MMT, MW,MWT,MPsi,MBeta,Mvw,Mbw,MbwT, Mvm,Mbm, MbmT)
-      names(resul) <- c("MMj", "MMT", "MW","MWT","MPsi","MBeta","Mvw","Mbw","MbwT","Mvm","Mbm","MbmT")
+      resul <- list(MMj, MMT, MW, MWT, MPsi, MBeta, Mvw, Mbw, MbwT, Mvm, Mbm, MbmT)
+      names(resul) <- c("MMj", "MMT", "MW", "MWT", "MPsi", "MBeta", "Mvw", "Mbw", "MbwT", "Mvm", "Mbm", "MbmT")
     }
   }
   return(resul)

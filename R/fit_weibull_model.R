@@ -20,7 +20,6 @@
 #' @export
 
 fit_weibull_model <- function(data, results, l) {
-
   Mean <- NULL
   MatMean <- NULL
   for (i in 1:length(results$MW[, l])) {
@@ -34,7 +33,7 @@ fit_weibull_model <- function(data, results, l) {
     MatMean <- rbind(MatMean, t(as.matrix(Mean)))
   }
 
- retemp <- mtnp(gridt)[,1]
+  retemp <- mtnp(gridt)[, 1]
 
   # Summary statistics for the estimated function
   medy1 <- apply(MatMean, 2, mean)

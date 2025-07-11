@@ -42,13 +42,12 @@ STModelGoelMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data)))
                               aa1 = 2.01,
                               bb1 = 1.005,
                               V = diag(100, ncol(X)),
-                              MM1 = as.matrix(rep(0, ncol(X)))),
+                              MM1 = as.matrix(rep(0, ncol(X)))
+                            ),
                             iteration, burnin) {
-
-
-  X<-as.matrix(X)
-  Z<-as.matrix(Z)
-  M<-as.matrix(M)
+  X <- as.matrix(X)
+  Z <- as.matrix(Z)
+  M <- as.matrix(M)
   pp <- ncol(X)
   ##################################
   # Valores iniciais
@@ -77,11 +76,11 @@ STModelGoelMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data)))
   #########################################
   # Parametros computacionais
   #########################################
-  SU1 = 0.01
-  SU2 = 0.01
-  SU3 = 28.01968
-  SU5 = 0.001118574
-  SU6 = 0.0553372
+  SU1 <- 0.01
+  SU2 <- 0.01
+  SU3 <- 28.01968
+  SU5 <- 0.001118574
+  SU6 <- 0.0553372
 
   n <- ncol(data)
   m <- nrow(data)
@@ -219,7 +218,7 @@ STModelGoelMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data)))
     }
   }
 
-  resul<-list(Mgama, MgamaT, Meta, MetaT, Mv, Mb, MbT, MW, MWT, MPsi, MPsiT)
+  resul <- list(Mgama, MgamaT, Meta, MetaT, Mv, Mb, MbT, MW, MWT, MPsi, MPsiT)
   names(resul) <- c("Mgama", "MgamaT", "Meta", "MetaT", "Mv", "Mb", "MbT", "MW", "MWT", "MPsi", "MPsiT")
-return(resul)
+  return(resul)
 }

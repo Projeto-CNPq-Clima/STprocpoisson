@@ -72,38 +72,37 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
                                    A = as.matrix(rep(0, ncol(Z))),
                                    B = diag(100, ncol(Z)),
                                    d = 100,
-                                   af = 1/(365+10),
-                                   bf = 1/(365-10)), iteration, burnin)
-{
-  #Valores iniciais
-  bw=1
-  vw=1
-  bm=1
-  vm=1
-  #theta=pi/2
-  #delta=0.001
-  f=1/365
-  M=as.matrix(rep(log(0.89),ncol(Data)))
-  W=as.matrix(rep(0,ncol(Data)))
+                                   af = 1 / (365 + 10),
+                                   bf = 1 / (365 - 10)
+                                 ), iteration, burnin) {
+  # Valores iniciais
+  bw <- 1
+  vw <- 1
+  bm <- 1
+  vm <- 1
+  # theta=pi/2
+  # delta=0.001
+  f <- 1 / 365
+  M <- as.matrix(rep(log(0.89), ncol(Data)))
+  W <- as.matrix(rep(0, ncol(Data)))
 
 
 
-  temp1= njfunction(data,0,max(data,na.rm = T))
-  nnjj=temp1[[2]]
-  Wmtemp=NULL
-  Mmtemp=NULL
+  temp1 <- njfunction(data, 0, max(data, na.rm = T))
+  nnjj <- temp1[[2]]
+  Wmtemp <- NULL
+  Mmtemp <- NULL
 
-  for(i in 1:ncol(data)){
-    mmmtemp=optim(c(1,1),logverouni,c(1,1),max(data,na.rm = T),nnjj[i],data[,i])
-    Wmtemp=c(Wmtemp,log(mmmtemp$par[1]))
-    Mmtemp=c(Mmtemp,log(mmmtemp$par[2]))
-
+  for (i in 1:ncol(data)) {
+    mmmtemp <- optim(c(1, 1), logverouniWEIBULL, c(1, 1), max(data, na.rm = T), nnjj[i], data[, i])
+    Wmtemp <- c(Wmtemp, log(mmmtemp$par[1]))
+    Mmtemp <- c(Mmtemp, log(mmmtemp$par[2]))
   }
-  theta <-coef(lm(Wmtemp~X))
-  delta<- coef(lm(Mmtemp~X))
+  theta <- coef(lm(Wmtemp ~ X))
+  delta <- coef(lm(Mmtemp ~ X))
 
 
-  #Hiperparametros
+  # Hiperparametros
   aa1 <- prior$aa1
   bb1 <- prior$bb1
   aa2 <- prior$aa2
@@ -117,117 +116,114 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
   A <- prior$A
   B <- prior$B
   # d deve ser real positivo
-  d<-prior$d
+  d <- prior$d
   af <- prior$af
   bf <- prior$bf
 
-  SU1=0.000001
-  SU2=0.000001
-  SU3=100
-  SU4=100
+  SU1 <- 0.000001
+  SU2 <- 0.000001
+  SU3 <- 100
+  SU4 <- 100
 
-  Psi=as.matrix(rep(0,ncol(X)))
-  Beta=as.matrix(rep(0,ncol(Z)))
+  Psi <- as.matrix(rep(0, ncol(X)))
+  Beta <- as.matrix(rep(0, ncol(Z)))
 
 
-  n=ncol(Data)
-  m=nrow(Data)
-  tempdados=is.na(Data)
-  nj=m-apply(tempdados,2,sum)
+  n <- ncol(Data)
+  m <- nrow(Data)
+  tempdados <- is.na(Data)
+  nj <- m - apply(tempdados, 2, sum)
 
-  Tt=array(NA,dim=c(1,n))
-  for(y in 1:n){
-    Tt[1,y]=Data[nj[y],y]
+  Tt <- array(NA, dim = c(1, n))
+  for (y in 1:n) {
+    Tt[1, y] <- Data[nj[y], y]
   }
 
 
-  MMj=NULL
-  MMT=NULL
+  MMj <- NULL
+  MMT <- NULL
 
-  MW=NULL
-  MWT=NULL
+  MW <- NULL
+  MWT <- NULL
 
-  MPsi=NULL
-  MBeta=NULL
+  MPsi <- NULL
+  MBeta <- NULL
 
-  Mvw=NULL
-  Mbw=NULL
-  MbwT=NULL
+  Mvw <- NULL
+  Mbw <- NULL
+  MbwT <- NULL
 
-  Mvm=NULL
-  Mbm=NULL
-  MbmT=NULL
+  Mvm <- NULL
+  Mbm <- NULL
+  MbmT <- NULL
 
-  Mdelta=NULL
-  MdeltaT=NULL
+  Mdelta <- NULL
+  MdeltaT <- NULL
 
-  Mtheta=NULL
-  MthetaT=NULL
+  Mtheta <- NULL
+  MthetaT <- NULL
 
-  Mf=NULL
-  MfT=NULL
+  Mf <- NULL
+  MfT <- NULL
 
-  for(j in 1:iteration){
+  for (j in 1:iteration) {
+    if (j <= burnin) {
+      temp <- amostrarWsa(delta, theta, W, M, sites, X, Psi, bw, vw, nj, Tt, Data, SU1, f)
+      W <- as.matrix(temp[[1]])
+      MWT <- c(MWT, temp[[2]])
 
+      temp <- amostrarMsa(delta, theta, W, M, sites, X, Beta, bm, vm, nj, Tt, Data, SU2, f)
+      M <- as.matrix(temp[[1]])
+      MMT <- c(MMT, temp[[2]])
 
-    if(j<=burnin){
-      temp=amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,Data,SU1,f)
-      W=as.matrix(temp[[1]])
-      MWT=c(MWT,temp[[2]])
+      temp <- amostrardelta(theta, delta, W, M, Data, nj, Tt, 0.01, f, d)
+      delta <- temp[[1]]
+      MdeltaT <- c(MdeltaT, temp[[2]])
 
-      temp=amostrarMsa(delta,theta,W,M,sites,X,Beta,bm,vm,nj,Tt,Data,SU2,f)
-      M=as.matrix(temp[[1]])
-      MMT=c(MMT,temp[[2]])
+      temp <- amostrartheta(theta, delta, W, M, Data, nj, Tt, 0.05, f)
+      theta <- temp[[1]]
+      MthetaT <- c(MthetaT, temp[[2]])
 
-      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,d)
-      delta=temp[[1]]
-      MdeltaT=c(MdeltaT,temp[[2]])
+      temp <- amostrarf(theta, delta, W, M, Data, nj, Tt, 0.00001 / 2, af, bf, f)
+      f <- temp[[1]]
+      MfT <- c(MfT, temp[[2]])
 
-      temp=amostrartheta(theta,delta,W,M,Data,nj,Tt,0.05,f)
-      theta=temp[[1]]
-      MthetaT=c(MthetaT,temp[[2]])
+      RR <- gCorr(bw, sites)
+      aaW <- (n / 2) + aa1
+      bbW <- 0.5 * t(W - X %*% Psi) %*% solve(RR) %*% (W - X %*% Psi) + bb1
 
-      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,af,bf,f)
-      f=temp[[1]]
-      MfT=c(MfT,temp[[2]])
+      vw <- 1 / rgamma(1, shape = aaW, rate = bbW)
 
-      RR=gCorr(bw,sites)
-      aaW=(n/2)+aa1
-      bbW=0.5*t(W-X%*%Psi)%*%solve(RR)%*%(W-X%*%Psi)+bb1
+      RR1 <- gCorr(bm, sites)
+      aaM <- (n / 2) + aa2
+      bbM <- 0.5 * t(M - Z %*% Beta) %*% solve(RR1) %*% (M - Z %*% Beta) + bb2
 
-      vw=1/rgamma(1,shape=aaW, rate = bbW)
+      vm <- 1 / rgamma(1, shape = aaM, rate = bbM)
 
-      RR1=gCorr(bm,sites)
-      aaM=(n/2)+aa2
-      bbM=0.5*t(M-Z%*%Beta)%*%solve(RR1)%*%(M-Z%*%Beta)+bb2
-
-      vm=1/rgamma(1,shape=aaM, rate = bbM)
-
-      varPsi=solve(solve(B)+t(X)%*%solve(gSigma(bw,vw,sites))%*%X)
-      medPsi=(t(A)%*%solve(B)+t(W)%*%solve(gSigma(bw,vw,sites))%*%X)%*%varPsi
-      Psi=as.matrix(MASS::mvrnorm(1,medPsi,varPsi))
+      varPsi <- solve(solve(B) + t(X) %*% solve(gSigma(bw, vw, sites)) %*% X)
+      medPsi <- (t(A) %*% solve(B) + t(W) %*% solve(gSigma(bw, vw, sites)) %*% X) %*% varPsi
+      Psi <- as.matrix(MASS::mvrnorm(1, medPsi, varPsi))
 
 
-      varBeta=solve(solve(B)+t(Z)%*%solve(gSigma(bm,vm,sites))%*%Z)
-      medBeta=(t(A)%*%solve(B)+t(M)%*%solve(gSigma(bm,vm,sites))%*%Z)%*%varBeta
-      Beta=as.matrix(MASS::mvrnorm(1,medBeta,varBeta))
+      varBeta <- solve(solve(B) + t(Z) %*% solve(gSigma(bm, vm, sites)) %*% Z)
+      medBeta <- (t(A) %*% solve(B) + t(M) %*% solve(gSigma(bm, vm, sites)) %*% Z) %*% varBeta
+      Beta <- as.matrix(MASS::mvrnorm(1, medBeta, varBeta))
 
-      temp=amostrarb(W,vw,bw,sites,c1,d1,X,Psi,SU3)
-      bw=temp[[1]]
-      MbwT=c(MbwT,temp[[2]])
+      temp <- amostrarb(W, vw, bw, sites, c1, d1, X, Psi, SU3)
+      bw <- temp[[1]]
+      MbwT <- c(MbwT, temp[[2]])
 
-      temp=amostrarb(M,vm,bm,sites,c2,d2,Z,Beta,SU4)
-      bm=temp[[1]]
-      MbmT=c(MbmT,temp[[2]])
+      temp <- amostrarb(M, vm, bm, sites, c2, d2, Z, Beta, SU4)
+      bm <- temp[[1]]
+      MbmT <- c(MbmT, temp[[2]])
 
 
-      if((j%%50)==0){
-        SU1=sintonizarN(burnin,0.15,SU1,MWT,j)
-        SU2=sintonizarN(burnin,0.15,SU2,MMT,j)
-        SU3=sintonizar(burnin,0.44,SU3,MbwT,j)
-        SU4=sintonizar(burnin,0.44,SU4,MbmT,j)
-
-      }else{
+      if ((j %% 50) == 0) {
+        SU1 <- sintonizarN(burnin, 0.15, SU1, MWT, j)
+        SU2 <- sintonizarN(burnin, 0.15, SU2, MMT, j)
+        SU3 <- sintonizar(burnin, 0.44, SU3, MbwT, j)
+        SU4 <- sintonizar(burnin, 0.44, SU4, MbmT, j)
+      } else {
 
       }
 
@@ -236,76 +232,72 @@ STModelWeibullMCMCSA <- function(Data, sites, X = cbind(as.matrix(rep(1, ncol(Da
 
 
       print(j)
+    } else {
+      temp <- amostrarWsa(delta, theta, W, M, sites, X, Psi, bw, vw, nj, Tt, Data, SU1, f)
+      W <- as.matrix(temp[[1]])
+      MW <- rbind(MW, t(W))
+      MWT <- c(MWT, temp[[2]])
 
-    }else{
+      temp <- amostrarMsa(delta, theta, W, M, sites, Z, Beta, bm, vm, nj, Tt, Data, SU2, f)
+      M <- as.matrix(temp[[1]])
+      MMj <- rbind(MMj, t(M))
+      MMT <- c(MMT, temp[[2]])
 
-      temp=amostrarWsa(delta,theta,W,M,sites,X,Psi,bw,vw,nj,Tt,Data,SU1,f)
-      W=as.matrix(temp[[1]])
-      MW=rbind(MW,t(W))
-      MWT=c(MWT,temp[[2]])
+      temp <- amostrardelta(theta, delta, W, M, Data, nj, Tt, 0.01, f, d)
+      delta <- temp[[1]]
+      Mdelta <- c(Mdelta, delta)
+      MdeltaT <- c(MdeltaT, temp[[2]])
 
-      temp=amostrarMsa(delta,theta,W,M,sites,Z,Beta,bm,vm,nj,Tt,Data,SU2,f)
-      M=as.matrix(temp[[1]])
-      MMj=rbind(MMj,t(M))
-      MMT=c(MMT,temp[[2]])
+      temp <- amostrartheta(theta, delta, W, M, Data, nj, Tt, 0.05, f)
+      theta <- temp[[1]]
+      Mtheta <- c(Mtheta, theta)
+      MthetaT <- c(MthetaT, temp[[2]])
 
-      temp=amostrardelta(theta,delta,W,M,Data,nj,Tt,0.01,f,d)
-      delta=temp[[1]]
-      Mdelta=c(Mdelta,delta)
-      MdeltaT=c(MdeltaT,temp[[2]])
+      temp <- amostrarf(theta, delta, W, M, Data, nj, Tt, 0.00001 / 2, af, bf, f)
+      f <- temp[[1]]
+      Mf <- c(Mf, f)
+      MfT <- c(MfT, temp[[2]])
 
-      temp=amostrartheta(theta,delta,W,M,Data,nj,Tt,0.05,f)
-      theta=temp[[1]]
-      Mtheta=c(Mtheta,theta)
-      MthetaT=c(MthetaT,temp[[2]])
+      RR <- gCorr(bw, sites)
+      aaW <- (n / 2) + aa1
+      bbW <- 0.5 * t(W - X %*% Psi) %*% solve(RR) %*% (W - X %*% Psi) + bb1
 
-      temp=amostrarf(theta,delta,W,M,Data,nj,Tt,0.00001/2,af,bf,f)
-      f=temp[[1]]
-      Mf=c(Mf,f)
-      MfT=c(MfT,temp[[2]])
+      vw <- 1 / rgamma(1, shape = aaW, rate = bbW)
+      Mvw <- c(Mvw, vw)
 
-      RR=gCorr(bw,sites)
-      aaW=(n/2)+aa1
-      bbW=0.5*t(W-X%*%Psi)%*%solve(RR)%*%(W-X%*%Psi)+bb1
+      RR1 <- gCorr(bm, sites)
+      aaM <- (n / 2) + aa2
+      bbM <- 0.5 * t(M - Z %*% Beta) %*% solve(RR1) %*% (M - Z %*% Beta) + bb2
 
-      vw=1/rgamma(1,shape=aaW, rate = bbW)
-      Mvw=c(Mvw,vw)
+      vm <- 1 / rgamma(1, shape = aaM, rate = bbM)
+      Mvm <- c(Mvm, vm)
 
-      RR1=gCorr(bm,sites)
-      aaM=(n/2)+aa2
-      bbM=0.5*t(M-Z%*%Beta)%*%solve(RR1)%*%(M-Z%*%Beta)+bb2
+      varPsi <- solve(solve(B) + t(X) %*% solve(gSigma(bw, vw, sites)) %*% X)
+      medPsi <- (t(A) %*% solve(B) + t(W) %*% solve(gSigma(bw, vw, sites)) %*% X) %*% varPsi
+      Psi <- as.matrix(MASS::mvrnorm(1, medPsi, varPsi))
+      MPsi <- rbind(MPsi, t(Psi))
 
-      vm=1/rgamma(1,shape=aaM, rate = bbM)
-      Mvm=c(Mvm,vm)
+      varBeta <- solve(solve(B) + t(Z) %*% solve(gSigma(bm, vm, sites)) %*% Z)
+      medBeta <- (t(A) %*% solve(B) + t(M) %*% solve(gSigma(bm, vm, sites)) %*% Z) %*% varBeta
+      Beta <- as.matrix(MASS::mvrnorm(1, medBeta, varBeta))
+      MBeta <- rbind(MBeta, t(Beta))
 
-      varPsi=solve(solve(B)+t(X)%*%solve(gSigma(bw,vw,sites))%*%X)
-      medPsi=(t(A)%*%solve(B)+t(W)%*%solve(gSigma(bw,vw,sites))%*%X)%*%varPsi
-      Psi=as.matrix(MASS::mvrnorm(1,medPsi,varPsi))
-      MPsi=rbind(MPsi,t(Psi))
+      temp <- amostrarb(W, vw, bw, sites, c1, d1, X, Psi, SU3)
+      bw <- temp[[1]]
+      Mbw <- c(Mbw, bw)
+      MbwT <- c(MbwT, temp[[2]])
 
-      varBeta=solve(solve(B)+t(Z)%*%solve(gSigma(bm,vm,sites))%*%Z)
-      medBeta=(t(A)%*%solve(B)+t(M)%*%solve(gSigma(bm,vm,sites))%*%Z)%*%varBeta
-      Beta=as.matrix(MASS::mvrnorm(1,medBeta,varBeta))
-      MBeta=rbind(MBeta,t(Beta))
-
-      temp=amostrarb(W,vw,bw,sites,c1,d1,X,Psi,SU3)
-      bw=temp[[1]]
-      Mbw=c(Mbw,bw)
-      MbwT=c(MbwT,temp[[2]])
-
-      temp=amostrarb(M,vm,bm,sites,c2,d2,Z,Beta,SU4)
-      bm=temp[[1]]
-      Mbm=c(Mbm,bm)
-      MbmT=c(MbmT,temp[[2]])
+      temp <- amostrarb(M, vm, bm, sites, c2, d2, Z, Beta, SU4)
+      bm <- temp[[1]]
+      Mbm <- c(Mbm, bm)
+      MbmT <- c(MbmT, temp[[2]])
 
 
 
       print(j)
-
-
     }
   }
-  RESUL<-list(MMj, MMT, MW,MWT,MPsi,MBeta,Mvw,Mbw,MbwT, Mvm,Mbm, MbmT,Mdelta,MdeltaT,Mtheta,MthetaT,Mf,MfT)
-  names(RESUL)<-c("MMj", "MMT", "MW","MWT","MPsi","MBeta","Mvw","Mbw","MbwT","Mvm","Mbm","MbmT","Mdelta","MdeltaT","Mtheta","MthetaT","Mf","MfT")
+  RESUL <- list(MMj, MMT, MW, MWT, MPsi, MBeta, Mvw, Mbw, MbwT, Mvm, Mbm, MbmT, Mdelta, MdeltaT, Mtheta, MthetaT, Mf, MfT)
+  names(RESUL) <- c("MMj", "MMT", "MW", "MWT", "MPsi", "MBeta", "Mvw", "Mbw", "MbwT", "Mvm", "Mbm", "MbmT", "Mdelta", "MdeltaT", "Mtheta", "MthetaT", "Mf", "MfT")
   return(RESUL)
 }

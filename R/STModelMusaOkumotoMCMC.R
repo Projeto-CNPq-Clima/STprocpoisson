@@ -41,22 +41,23 @@
 #'
 #' @export
 
-STModelMusaOkumotoMCMC <- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data))),(1/100)*sites),
-                                   prior = list(V=diag(100,ncol(X)),
-                                                M=as.matrix(rep(0,ncol(X))),
-                                                c2=1e-05,
-                                                d2=0.001,
-                                                c4=2.01,
-                                                d4=1.005,
-                                                c3=(-2*log(0.05)/max(dist(sites)))*0.1,
-                                                d3=0.1
+STModelMusaOkumotoMCMC <- function(data, sites, X = cbind(as.matrix(rep(1, ncol(data))), (1 / 100) * sites),
+                                   prior = list(
+                                     V = diag(100, ncol(X)),
+                                     M = as.matrix(rep(0, ncol(X))),
+                                     c2 = 1e-05,
+                                     d2 = 0.001,
+                                     c4 = 2.01,
+                                     d4 = 1.005,
+                                     c3 = (-2 * log(0.05) / max(dist(sites))) * 0.1,
+                                     d3 = 0.1
                                    ), iteration, burnin) {
   b <- 1
   v <- 1
   alpha <- 1
   W <- as.matrix(rep(0, ncol(data)))
-  data<- as.matrix(data)
-  sites<-as.matrix(sites)
+  data <- as.matrix(data)
+  sites <- as.matrix(sites)
 
   # Hiperparametros
 
@@ -72,9 +73,9 @@ STModelMusaOkumotoMCMC <- function(data, sites,X=cbind(as.matrix(rep(1,ncol(data
   c3 <- prior$c3
   d3 <- prior$d3
 
-  SU2 = 1000
-  SU3 = 28.01968
-  SU5 = 0.001118574
+  SU2 <- 1000
+  SU3 <- 28.01968
+  SU5 <- 0.001118574
 
   Psi <- as.matrix(rep(0, ncol(X)))
 

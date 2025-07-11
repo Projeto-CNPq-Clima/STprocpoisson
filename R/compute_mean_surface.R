@@ -31,9 +31,8 @@
 #' @export
 
 compute_mean_surface <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau) {
-
-  X<-as.matrix(X)
-  Z<-as.matrix(Z)
+  X <- as.matrix(X)
+  Z <- as.matrix(Z)
 
   jj <- nrow(DNO)
   res <- rbind(DNO, as.matrix(sites))
@@ -115,8 +114,8 @@ compute_mean_surface <- function(results, sites, X, Z, DNO, CovXNO, CovZNO, tau)
     Surface[, kk] <- minterest
   }
 
-  output <- list(Surface,MMNO,MWNO)
-  names(output) <- c("Surface","MMNO","MWNO")
+  output <- list(Surface, MMNO, MWNO)
+  names(output) <- c("Surface", "MMNO", "MWNO")
 
   return(output)
 }
